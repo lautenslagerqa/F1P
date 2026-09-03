@@ -20,7 +20,7 @@ async function getUser() {
         var c2 = newRow.insertCell(1);
         var c3 = newRow.insertCell(2);
         var c4 = newRow.insertCell(3);
-        c1.innerHTML = dStands[i].Driver.givenName;
+        c1.innerHTML = dStands[i].Driver.familyName;
         c2.innerHTML = dStands[i].points;
         c3.innerHTML = dStands[i].wins;
         var p = await getPoles(dStands[i].Driver.driverId);
@@ -46,5 +46,25 @@ function saveInput() {
     var y = document.getElementById('year');
     year = y.value;
     getUser();
+    getDrivers();
 }
+async function getDrivers() {
+    var driv_url = `https://api.jolpi.ca/ergast/f1/${year}/drivers/`;
+        // Find the select element
+    const r = await fetch(driv_url);
+    const d = await r.json();
+    const drivers = d.MRData.DriverTable.Drivers;
+    const selectEl = document.getElementById('driv1');
+    const len = drivers.length;
+    for (let i = 0; i < len; i++) {
+        // Syntax: new Option(text, value)
+        var name = drivers[i].familyName;
+        var newOption = new Option(name, name);
+
+        // Append to the end of the list
+        selectEl.add(newOption);
+    }
+
+}
+
 getUser();
