@@ -28,3 +28,9 @@ ul li a {
 ul li a:hover {
   background-color: #111111;
 }
+th {
+  text-align: left;
+}
+#tbod td {
+  padding: 5px 5px 5px 5px;
+}
