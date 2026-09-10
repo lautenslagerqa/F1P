@@ -87,6 +87,8 @@ async function compInput() {
     const data2 = await response2.json();
     const p1 = data1.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].points;
     const p2 = data2.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].points;
+    const w1 = data1.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].wins;
+    const w2 = data2.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].wins;
     row = t.rows[0];
     row.innerHTML = "";
 
@@ -97,5 +99,16 @@ async function compInput() {
     var c3 = row.insertCell(2);
     c2.innerHTML = p1;
     c3.innerHTML = p2;
+    row = t.rows[1];
+    row.innerHTML = "";
+
+    c1 = document.createElement('th');
+    c1.innerHTML = 'Wins';
+    row.appendChild(c1);
+    c2 = row.insertCell(1);
+    c3 = row.insertCell(2);
+    c2.innerHTML = w1;
+    c3.innerHTML = w2;
+    
 }
 getUser().then(getDrivers);
