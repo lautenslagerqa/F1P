@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./styles/styles.css">
     <script src="script.js" defer></script>   
     <title>Formula Predict</title>
 </head>
 <body>
-    <ul>
-        <li><a>Standings</a></li>
-        <li><a>Predict</a></li>
-        <li><a>Projection</a></li>
+    <ul id="nav">
+        <li><a href="./index.html">Standings</a></li>
+        <li><a href="./sections/predict.html">Predict</a></li>
+        <li><a href="./sections/project.html">Projection</a></li>
     </ul>
     <div class="head">
         <h1 id="head">Formula Predict</h1>
@@ -40,6 +40,20 @@
             <select name="driv1" id="driv1"></select>
             <label for="driv2">Driver 2:</label>
             <select name="driv2" id="driv2"></select>
+            <button onclick="compInput()">Submit</button><br>
+            <table id="comp">
+                <tbody>
+                    <tr>
+                        <th>Points</th>
+                    </tr>
+                    <tr>
+                        <th>Wins</th>
+                    </tr>
+                    <tr>
+                        <th>Poles</th>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </body>

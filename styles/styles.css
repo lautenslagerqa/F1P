@@ -2,24 +2,31 @@
 3C1B43
 D33F49*/
 
+body {
+  padding: 0;
+  margin: 0;
+}
 .wrapper {
   display: grid;
+  margin: 0% 1% 0% 1%;
   grid-template-columns: 1fr 1fr;
 }
 h1 {
+  margin: 0.5% 1% 0% 1%;
   color: #D33F49;
 }
-ul {
+#nav {
   list-style-type: none;
   margin: 0;
   padding: 0;
   overflow: hidden;
   background-color: #3C1B43;
+  display: flex;
 }
-
+/* 
 ul li {
   float: left;
-}
+} */
 
 ul li a {
   display: block;
@@ -36,6 +43,6 @@ th {
   text-align: left;
 }
 #tbod td {
-  padding: 5px 5px 5px 5px;
+  padding: 5px 5px 5px 0px;
   text-align: left;
 }

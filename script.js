@@ -2,6 +2,8 @@
 const base_url = "https://api.jolpi.ca/ergast/f1/";
 var year = 2026;
 var drivers = [];
+var dID = [];
+var polesAr = [];
 async function getUser() {
     var api_url = `${base_url}${year}/driverstandings/`;
     const response = await fetch(api_url);
@@ -27,6 +29,7 @@ async function getUser() {
         c3.innerHTML = dStands[i].wins;
         var p = await getPoles(dStands[i].Driver.driverId);
         drivers.push(dStands[i].Driver.familyName);
+        dID.push(dStands[i].Driver.driverId);
         c4.innerHTML = p;
 
     }
@@ -42,6 +45,7 @@ async function getPoles(i) {
     for (let i = 0; i < len; i++) {
         if (poles[i].QualifyingResults?.[0]?.position == 1) p++;
     }
+    polesAr.push(p);
     return p;
 }
 async function saveInput() {
@@ -55,18 +59,43 @@ function getDrivers() {
     selectElement1.innerHTML = '';
     const selectElement2 = document.getElementById('driv2');
     selectElement2.innerHTML = '';
-    drivers.forEach(option => {
+    for (let i = 0; i < drivers.length; i++) {
+        var option = drivers[i];
         console.log(option);
         const newOption1 = document.createElement('option');
-        newOption1.value = option; 
+        newOption1.value = dID[i]; 
         newOption1.textContent = option;
         const newOption2 = document.createElement('option');
-        newOption2.value = option; 
+        newOption2.value = dID[i]; 
         newOption2.textContent = option;
         selectElement1.appendChild(newOption1);
         selectElement2.appendChild(newOption2);
+    }
+    drivers.forEach(option => {
     });
 
 }
+async function compInput() {
+    var d1 = (document.getElementById('driv1')).value;
+    var d2 = (document.getElementById('driv2')).value; 
+    var t = document.getElementById('comp');
+    var d1_url = `${base_url}${year}/drivers/${d1}/driverstandings/`;
+    const response1 = await fetch(d1_url);
+    var d2_url = `${base_url}${year}/drivers/${d2}/driverstandings/`;
+    const response2 = await fetch(d2_url);
+    const data1 = await response1.json();
+    const data2 = await response2.json();
+    const p1 = data1.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].points;
+    const p2 = data2.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].points;
+    row = t.rows[0];
+    row.innerHTML = "";
 
+    var c1 = document.createElement('th');
+    c1.innerHTML = 'Points';
+    row.appendChild(c1);
+    var c2 = row.insertCell(1);
+    var c3 = row.insertCell(2);
+    c2.innerHTML = p1;
+    c3.innerHTML = p2;
+}
 getUser().then(getDrivers);
