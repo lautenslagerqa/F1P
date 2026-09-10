@@ -2,6 +2,10 @@
 3C1B43
 D33F49*/
 
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
 h1 {
   color: #D33F49;
 }

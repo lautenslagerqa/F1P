@@ -1,6 +1,7 @@
 
 const base_url = "https://api.jolpi.ca/ergast/f1/";
 var year = 2026;
+var drivers = [];
 async function getUser() {
     var api_url = `${base_url}${year}/driverstandings/`;
     const response = await fetch(api_url);
@@ -10,6 +11,7 @@ async function getUser() {
     const stands = data.MRData.StandingsTable.StandingsLists[0];
     const dStands = stands.DriverStandings;
     const l = dStands.length;
+    drivers = [];
     const fst = stands.DriverStandings[0]
     //document.querySelector('#head').innerHTML = fst.Driver.givenName;
     var table = document.getElementById("tab").getElementsByTagName('tbody')[0];
@@ -24,7 +26,7 @@ async function getUser() {
         c2.innerHTML = dStands[i].points;
         c3.innerHTML = dStands[i].wins;
         var p = await getPoles(dStands[i].Driver.driverId);
-        
+        drivers.push(dStands[i].Driver.familyName);
         c4.innerHTML = p;
 
     }
@@ -42,29 +44,29 @@ async function getPoles(i) {
     }
     return p;
 }
-function saveInput() {
+async function saveInput() {
     var y = document.getElementById('year');
     year = y.value;
-    getUser();
+    await getUser();
     getDrivers();
 }
-async function getDrivers() {
-    var driv_url = `https://api.jolpi.ca/ergast/f1/${year}/drivers/`;
-        // Find the select element
-    const r = await fetch(driv_url);
-    const d = await r.json();
-    const drivers = d.MRData.DriverTable.Drivers;
-    const selectEl = document.getElementById('driv1');
-    const len = drivers.length;
-    for (let i = 0; i < len; i++) {
-        // Syntax: new Option(text, value)
-        var name = drivers[i].familyName;
-        var newOption = new Option(name, name);
-
-        // Append to the end of the list
-        selectEl.add(newOption);
-    }
+function getDrivers() {
+    const selectElement1 = document.getElementById('driv1');
+    selectElement1.innerHTML = '';
+    const selectElement2 = document.getElementById('driv2');
+    selectElement2.innerHTML = '';
+    drivers.forEach(option => {
+        console.log(option);
+        const newOption1 = document.createElement('option');
+        newOption1.value = option; 
+        newOption1.textContent = option;
+        const newOption2 = document.createElement('option');
+        newOption2.value = option; 
+        newOption2.textContent = option;
+        selectElement1.appendChild(newOption1);
+        selectElement2.appendChild(newOption2);
+    });
 
 }
 
-getUser();
+getUser().then(getDrivers);
