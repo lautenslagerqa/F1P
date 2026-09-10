@@ -3,7 +3,9 @@ const base_url = "https://api.jolpi.ca/ergast/f1/";
 var year = 2026;
 var drivers = [];
 var dID = [];
+var pointsArr = [];
 var polesAr = [];
+var winArr = [];
 async function getUser() {
     var api_url = `${base_url}${year}/driverstandings/`;
     const response = await fetch(api_url);
@@ -30,6 +32,8 @@ async function getUser() {
         var p = await getPoles(dStands[i].Driver.driverId);
         drivers.push(dStands[i].Driver.familyName);
         dID.push(dStands[i].Driver.driverId);
+        pointsArr.push(dStands[i].points);
+        winArr.push(dStands[i].wins);
         c4.innerHTML = p;
 
     }
@@ -63,10 +67,10 @@ function getDrivers() {
         var option = drivers[i];
         console.log(option);
         const newOption1 = document.createElement('option');
-        newOption1.value = dID[i]; 
+        newOption1.value = i; 
         newOption1.textContent = option;
         const newOption2 = document.createElement('option');
-        newOption2.value = dID[i]; 
+        newOption2.value = i; 
         newOption2.textContent = option;
         selectElement1.appendChild(newOption1);
         selectElement2.appendChild(newOption2);
@@ -79,16 +83,16 @@ async function compInput() {
     var d1 = (document.getElementById('driv1')).value;
     var d2 = (document.getElementById('driv2')).value; 
     var t = document.getElementById('comp');
-    var d1_url = `${base_url}${year}/drivers/${d1}/driverstandings/`;
-    const response1 = await fetch(d1_url);
-    var d2_url = `${base_url}${year}/drivers/${d2}/driverstandings/`;
-    const response2 = await fetch(d2_url);
-    const data1 = await response1.json();
-    const data2 = await response2.json();
-    const p1 = data1.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].points;
-    const p2 = data2.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].points;
-    const w1 = data1.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].wins;
-    const w2 = data2.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].wins;
+    // var d1_url = `${base_url}${year}/drivers/${d1}/driverstandings/`;
+    // const response1 = await fetch(d1_url);
+    // var d2_url = `${base_url}${year}/drivers/${d2}/driverstandings/`;
+    // const response2 = await fetch(d2_url);
+    // const data1 = await response1.json();
+    // const data2 = await response2.json();
+    // const p1 = data1.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].points;
+    // const p2 = data2.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].points;
+    // const w1 = data1.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].wins;
+    // const w2 = data2.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].wins;
     row = t.rows[0];
     row.innerHTML = "";
 
@@ -97,8 +101,8 @@ async function compInput() {
     row.appendChild(c1);
     var c2 = row.insertCell(1);
     var c3 = row.insertCell(2);
-    c2.innerHTML = p1;
-    c3.innerHTML = p2;
+    c2.innerHTML = pointsArr[d1];
+    c3.innerHTML = pointsArr[d2];
     row = t.rows[1];
     row.innerHTML = "";
 
@@ -107,8 +111,8 @@ async function compInput() {
     row.appendChild(c1);
     c2 = row.insertCell(1);
     c3 = row.insertCell(2);
-    c2.innerHTML = w1;
-    c3.innerHTML = w2;
+    c2.innerHTML = winArr[d1];
+    c3.innerHTML = winArr[d2];
     
 }
 getUser().then(getDrivers);
