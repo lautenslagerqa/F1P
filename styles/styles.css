@@ -46,3 +46,8 @@ th {
   padding: 5px 5px 5px 0px;
   text-align: left;
 }
+
+#comp td {
+  padding-right: 25px;
+  padding-left: 25px;
+}
