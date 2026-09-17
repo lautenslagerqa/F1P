@@ -46,6 +46,10 @@ th {
   padding: 5px 5px 5px 0px;
   text-align: left;
 }
+#itable td {
+  padding: 5px 5px 5px 0px;
+  text-align: left;
+}
 #comp {
   width: 84%;
 }
