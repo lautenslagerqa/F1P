@@ -46,8 +46,15 @@ th {
   padding: 5px 5px 5px 0px;
   text-align: left;
 }
-
+#comp {
+  width: 84%;
+}
 #comp td {
   padding-right: 25px;
   padding-left: 25px;
+  text-align: left;
+}
+
+#comp td :not(:first-child) {
+  text-align: center;
 }

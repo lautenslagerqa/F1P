@@ -83,16 +83,6 @@ async function compInput() {
     var d1 = (document.getElementById('driv1')).value;
     var d2 = (document.getElementById('driv2')).value; 
     var t = document.getElementById('comp');
-    // var d1_url = `${base_url}${year}/drivers/${d1}/driverstandings/`;
-    // const response1 = await fetch(d1_url);
-    // var d2_url = `${base_url}${year}/drivers/${d2}/driverstandings/`;
-    // const response2 = await fetch(d2_url);
-    // const data1 = await response1.json();
-    // const data2 = await response2.json();
-    // const p1 = data1.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].points;
-    // const p2 = data2.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].points;
-    // const w1 = data1.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].wins;
-    // const w2 = data2.MRData.StandingsTable.StandingsLists[0].DriverStandings[0].wins;
     row = t.rows[0];
     row.innerHTML = "";
 
@@ -113,6 +103,34 @@ async function compInput() {
     c3 = row.insertCell(2);
     c2.innerHTML = winArr[d1];
     c3.innerHTML = winArr[d2];
-    
+
+    row = t.rows[2];
+    row.innerHTML = "";
+    c1 = document.createElement('th');
+    c1.innerHTML = 'Poles';
+    row.appendChild(c1);
+    c2 = row.insertCell(1);
+    c3 = row.insertCell(2);
+    c2.innerHTML = polesAr[d1];
+    c3.innerHTML = polesAr[d2];
+    compColor();
 }
+
+function compColor() { 
+    var t = document.getElementById('comp');
+    for (let i = 0; i < t.rows.length; i++) {
+        var rows = t.rows[i];
+        var c1 = parseInt(rows.cells[1].innerText);
+        var c2 = parseInt(rows.cells[2].innerText);
+        if (c1 > c2) {
+            rows.cells[1].style.backgroundColor = 'lightblue';
+        } else if (c1 == c2) {
+            rows.cells[1].style.backgroundColor = 'lightgray';
+            rows.cells[2].style.backgroundColor = 'lightgray';
+        } else {
+            rows.cells[2].style.backgroundColor = 'lightblue';
+        }
+    }
+}
+
 getUser().then(getDrivers);
