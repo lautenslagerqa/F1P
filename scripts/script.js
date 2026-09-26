@@ -22,10 +22,13 @@ async function getUser() {
     document.getElementById('tbod').innerHTML = '';
     for (let i = 0; i < l; i++) {
         var newRow = table.insertRow();
-        var c1 = newRow.insertCell(0);
-        var c2 = newRow.insertCell(1);
-        var c3 = newRow.insertCell(2);
-        var c4 = newRow.insertCell(3);
+        var p1 = newRow.insertCell(0);
+        var c1 = newRow.insertCell(1);
+        var c2 = newRow.insertCell(2);
+        var c3 = newRow.insertCell(3);
+        var c4 = newRow.insertCell(4);
+        let position = i+1;
+        p1.textContent = `${position}${(position) === 1 ? 'st' : position === 2 ? 'nd' : position === 3 ? 'rd' : 'th'}`;
         c1.innerHTML = dStands[i].Driver.familyName;
         c2.innerHTML = dStands[i].points;
         c3.innerHTML = dStands[i].wins;

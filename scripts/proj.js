@@ -68,37 +68,37 @@ async function saveInput() {
 function getDrivers() {
     const tab = document.getElementById('inputRows');
     tab.innerHTML = '';
-    for (let i = 0; i < drivers.length; i++) {
+    for (let position = 1; position <= 10; position++) {
         const newRow = tab.insertRow();
-        newRow.dataset.driverIndex = i;
         var c1 = newRow.insertCell(0);
         var c2 = newRow.insertCell(1);
         const select = document.createElement('select');
-        select.className = 'pos';
-        select.name = 'pos';
-        for (let position = 11; position >= 1; position--) {
-            const option = document.createElement('option');
-            option.value = positionPoints[position-1];
-            option.textContent = position;
-            select.appendChild(option);
-        }
+        select.className = 'driver';
+        select.name = 'driver';
+        select.add(new Option('Select a driver', ''));
+        drivers.forEach((driver, driverIndex) => {
+            select.add(new Option(driver, driverIndex));
+        });
         select.addEventListener('change', updateStandings);
-        c1.appendChild(select);
-        c2.textContent = drivers[i];
+        c1.textContent = `${position}${position === 1 ? 'st' : position === 2 ? 'nd' : position === 3 ? 'rd' : 'th'}`;
+        c2.appendChild(select);
     }
 
 }
 
 function updateStandings() {
-    const inputRows = document.querySelectorAll('#inputRows tr');
     const standingRows = document.querySelectorAll('#tbod tr');
+    const projectedPoints = pointsArr.map(Number);
 
-    inputRows.forEach((row, i) => {
-        const selectedPoints = Number(row.cells[0].querySelector('select').value);
-        const standingRow = document.querySelector(
-            `#tbod tr[data-driver-index="${row.dataset.driverIndex}"]`
-        );
-        standingRow.cells[1].textContent = Number(pointsArr[i]) + selectedPoints;
+    document.querySelectorAll('#inputRows select').forEach((select, positionIndex) => {
+        if (select.value !== '') {
+            projectedPoints[Number(select.value)] += positionPoints[positionIndex];
+        }
+    });
+
+    standingRows.forEach((row) => {
+        const driverIndex = Number(row.dataset.driverIndex);
+        row.cells[1].textContent = projectedPoints[driverIndex];
     });
 
     [...standingRows]
