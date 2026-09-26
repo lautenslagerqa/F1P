@@ -11,7 +11,7 @@ async function getUser() {
     const response = await fetch(api_url);
     
     const data = await response.json();
-    console.log(data.MRData.StandingsTable.StandingsLists);
+    //console.log(data.MRData.StandingsTable.StandingsLists);
     const stands = data.MRData.StandingsTable.StandingsLists[0];
     const dStands = stands.DriverStandings;
     const l = dStands.length;
@@ -65,7 +65,7 @@ function getDrivers() {
     selectElement2.innerHTML = '';
     for (let i = 0; i < drivers.length; i++) {
         var option = drivers[i];
-        console.log(option);
+        //console.log(option);
         const newOption1 = document.createElement('option');
         newOption1.value = i; 
         newOption1.textContent = option;
