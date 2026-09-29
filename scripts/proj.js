@@ -9,8 +9,7 @@ var winArr = [];
 var positionPoints = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1, 0];
 async function getUser() {
     var api_url = `${base_url}${year}/driverstandings/`;
-    const response = await fetch(api_url);
-    
+    const [response, poleCounts] = await Promise.all([fetch(api_url), getPoles()]);
     const data = await response.json();
     console.log(data.MRData.StandingsTable.StandingsLists);
     const stands = data.MRData.StandingsTable.StandingsLists[0];
@@ -35,7 +34,7 @@ async function getUser() {
         c1.innerHTML = dStands[i].Driver.familyName;
         c2.innerHTML = dStands[i].points;
         c3.innerHTML = dStands[i].wins;
-        var p = await getPoles(dStands[i].Driver.driverId);
+        var p = poleCounts[dStands[i].Driver.driverId] || 0;
         drivers.push(dStands[i].Driver.familyName);
         dID.push(dStands[i].Driver.driverId);
         pointsArr.push(dStands[i].points);
@@ -45,18 +44,30 @@ async function getUser() {
     }
 }
 
-async function getPoles(i) {
-    var p = 0;
-    var pole_url = `${base_url}${year}/drivers/${i}/qualifying/`;
-    const resp = await fetch(pole_url);
-    const d = await resp.json();
-    const poles = d.MRData.RaceTable.Races;
-    const len = poles.length;
-    for (let i = 0; i < len; i++) {
-        if (poles[i].QualifyingResults?.[0]?.position == 1) p++;
+async function getPoles() {
+    const pageSize = 100;
+    const firstResponse = await fetch(`${base_url}${year}/qualifying/?limit=${pageSize}`);
+    const firstPage = await firstResponse.json();
+    const total = Number(firstPage.MRData.total);
+    const remainingPages = await Promise.all(
+        Array.from({ length: Math.ceil((total - pageSize) / pageSize) }, (_, page) => {
+            const offset = (page + 1) * pageSize;
+            return fetch(`${base_url}${year}/qualifying/?limit=${pageSize}&offset=${offset}`)
+                .then(response => response.json());
+        })
+    );
+    const poleCounts = {};
+    for (const page of [firstPage, ...remainingPages]) {
+        for (const race of page.MRData.RaceTable.Races) {
+            for (const result of race.QualifyingResults || []) {
+                if (result.position == 1) {
+                    const driverId = result.Driver.driverId;
+                    poleCounts[driverId] = (poleCounts[driverId] || 0) + 1;
+                }
+            }
+        }
     }
-    polesAr.push(p);
-    return p;
+    return poleCounts;
 }
 async function saveInput() {
     var y = document.getElementById('year');
