@@ -105,3 +105,4 @@ function updateStandings() {
         .sort((rowA, rowB) => Number(rowB.cells[1].textContent) - Number(rowA.cells[1].textContent))
         .forEach((row) => document.getElementById('tbod').appendChild(row));
 }
+getUser().then(getDrivers);

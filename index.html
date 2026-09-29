@@ -19,7 +19,8 @@
     <div class="wrapper">
         <div class="stnds">
             <h2>Standings</h2>
-            <input type="number" id="year" placeholder="Enter the year">
+            <p>Enter any year from 1955-present to view driver standings of that season</p>
+            <input type="number" id="year" placeholder="Enter year here">
             <button onclick="saveInput()">Submit</button><br>
             
             <table id="tab">
@@ -36,10 +37,15 @@
         </div>
         <div class="h2h">
             <h2>Head-to-Head</h2>
+            <p>Compare two drivers in the selected season</p>
             <label for="driv1">Driver 1:</label>
-            <select name="driv1" id="driv1"></select>
+            <select name="driv1" id="driv1">
+                <option value="" disabled selected>Select an driver</option>
+            </select>
             <label for="driv2">Driver 2:</label>
-            <select name="driv2" id="driv2"></select>
+            <select name="driv2" id="driv2">
+                <option value="" disabled selected>Select an driver</option>
+            </select>
             <button onclick="compInput()">Submit</button><br>
             <table id="comp">
                 <tbody>
