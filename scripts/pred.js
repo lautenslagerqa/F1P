@@ -117,8 +117,8 @@ function elimDrivers() {
 
 
 async function saveInput() {
-    var y = document.getElementById('y');
-    year = y.value;
+    // var y = document.getElementById('y');
+    // year = y.value;
     const raceInput = document.getElementById('r');
     if (raceInput.value.trim() === '') return;
     const requestedRaces = Number(raceInput.value);
