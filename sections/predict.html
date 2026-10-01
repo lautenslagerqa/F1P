@@ -18,11 +18,12 @@
         <h1 id="head">Prediction</h1>
     </div>
     <div class="wrapper">
-        <div class="stnds">
+        <section class="stnds">
             <h2>Standings</h2>
             <h3 id="rr">Actual Remaining Races: </h3>
             <p>Input the amount of remaining races you wish to have:</p>
             <!-- <input type="number" id="y" placeholder="Enter the year"> -->
+            <div id="errorRace" style="color: red;"></div>
             <input type="number" id="r" placeholder="Enter race count">
             <button onclick="saveInput()">Submit</button><br>
             <table id="tab">
@@ -36,8 +37,8 @@
                 </thead>
                 <tbody id="tbod"></tbody>
             </table>
-        </div>
-        <div class="elim">
+        </section>
+        <section class="elim">
             <h2>Eliminated Drivers</h2>
             <table id="el">
                 <thead>
@@ -46,7 +47,7 @@
                 <tbody id="tb"></tbody>
 
             </table>
-        </div>
+        </section>
     </div>
 </body>
 </html>

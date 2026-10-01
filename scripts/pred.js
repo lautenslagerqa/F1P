@@ -120,12 +120,17 @@ async function saveInput() {
     // var y = document.getElementById('y');
     // year = y.value;
     const raceInput = document.getElementById('r');
-    if (raceInput.value.trim() === '') return;
-    const requestedRaces = Number(raceInput.value);
-    if (!Number.isInteger(requestedRaces) || requestedRaces < 0) return;
-    rr = requestedRaces;
-    await Promise.all([getUser()]);
-    elimDrivers();
+    if (raceInput.value <= 0) {
+        document.getElementById('errorRace').innerText = 'Input but greater than 1.';
+    } else {
+        document.getElementById('errorRace').innerText = '';
+        if (raceInput.value.trim() === '') return;
+        const requestedRaces = Number(raceInput.value);
+        if (!Number.isInteger(requestedRaces) || requestedRaces < 0) return;
+        rr = requestedRaces;
+        await Promise.all([getUser()]);
+        elimDrivers();
+    }
 }
 
 async function initPrediction() {

@@ -5,6 +5,14 @@ D33F49*/
 body {
   padding: 0;
   margin: 0;
+  padding-left: 0.5%;
+  margin-top: 50px;
+}
+section {
+  /* border-radius: 8%; */
+  padding: 2% 2% 2% 2%;
+  /* box-shadow: 7px 7px 0 rgba(0, 0, 0, 0.5); */
+  margin: 3px 3px 3px 3px;
 }
 .wrapper {
   display: grid;
@@ -15,6 +23,7 @@ h1 {
   margin: 0.5% 1% 0% 1%;
   color: #D33F49;
 }
+
 #nav {
   position: fixed;
   top: 0;
@@ -43,7 +52,7 @@ ul li .head {
   /* color: white; */
   text-align: center;
   width: 250px;
-  padding: 4px 16px;
+  padding: 4px 5px;
   text-decoration: none;
 }
 ul li a:hover {
