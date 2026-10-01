@@ -121,7 +121,7 @@ async function saveInput() {
     // year = y.value;
     const raceInput = document.getElementById('r');
     if (raceInput.value <= 0) {
-        document.getElementById('errorRace').innerText = 'Input but greater than 1.';
+        document.getElementById('errorRace').innerText = 'Input must be greater than 1.';
     } else {
         document.getElementById('errorRace').innerText = '';
         if (raceInput.value.trim() === '') return;
