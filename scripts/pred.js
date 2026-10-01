@@ -97,6 +97,7 @@ async function getRemainingRaces() {
     rr = upcomingRaces.length;
     console.log(`Remaining races: ${upcomingRaces.length}`);
     document.getElementById("rr").textContent = `Remaining Races: ${upcomingRaces.length}`;
+    document.getElementById("r").value = rr;
 }
  
 function elimDrivers() {
@@ -113,6 +114,20 @@ function elimDrivers() {
         }
     }
 }
+
+
+async function saveInput() {
+    var y = document.getElementById('y');
+    year = y.value;
+    const raceInput = document.getElementById('r');
+    if (raceInput.value.trim() === '') return;
+    const requestedRaces = Number(raceInput.value);
+    if (!Number.isInteger(requestedRaces) || requestedRaces < 0) return;
+    rr = requestedRaces;
+    await Promise.all([getUser()]);
+    elimDrivers();
+}
+
 async function initPrediction() {
     await Promise.all([getRemainingRaces(), getUser()]);
     elimDrivers();
