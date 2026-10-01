@@ -16,6 +16,10 @@ h1 {
   color: #D33F49;
 }
 #nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -27,7 +31,6 @@ h1 {
 ul li {
   float: left;
 } */
-
 ul li a {
   display: block;
   color: white;
@@ -35,7 +38,14 @@ ul li a {
   padding: 14px 16px;
   text-decoration: none;
 }
-
+ul li .head {
+  display: block;
+  /* color: white; */
+  text-align: center;
+  width: 250px;
+  padding: 4px 16px;
+  text-decoration: none;
+}
 ul li a:hover {
   background-color: #111111;
 }

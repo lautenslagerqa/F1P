@@ -9,6 +9,7 @@
 </head>
 <body>
     <ul id="nav">
+        <li><h1 class="head">Formula Predict</h1></li>
         <li><a href="./index.html">Standings</a></li>
         <li><a href="./sections/predict.html">Predict</a></li>
         <li><a href="./sections/project.html">Projection</a></li>
@@ -20,6 +21,7 @@
         <div class="stnds">
             <h2>Standings</h2>
             <p>Enter any year from 1955-present to view driver standings of that season</p>
+            <div id="errorYear" style="color: red;"></div>
             <input type="number" id="year" placeholder="Enter year here">
             <button onclick="saveInput()">Submit</button><br>
             
@@ -38,6 +40,7 @@
         <div class="h2h">
             <h2>Head-to-Head</h2>
             <p>Compare two drivers in the selected season</p>
+            <div id="errorDriv" style="color: red;"></div>
             <label for="driv1">Driver 1:</label>
             <select name="driv1" id="driv1">
                 <option value="" disabled selected>Select an driver</option>

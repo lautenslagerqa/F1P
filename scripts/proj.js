@@ -71,10 +71,15 @@ async function getPoles() {
 }
 async function saveInput() {
     var y = document.getElementById('year');
-    year = y.value;
-    await getUser();
-    getDrivers();
-    updateStandings();
+    if (y.value < 1955 || y.value > new Date().getFullYear()) {
+        document.getElementById('errorYear').innerText = 'Input must be from 1955-present.';
+    } else {
+        document.getElementById('errorYear').innerText = '';
+        year = y.value;
+        await getUser();
+        getDrivers();
+        updateStandings();
+    }
 }
 function getDrivers() {
     const tab = document.getElementById('inputRows');

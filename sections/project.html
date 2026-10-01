@@ -9,6 +9,7 @@
 </head>
 <body>
     <ul id="nav">
+        <li><h1 class="head">Formula Predict</h1></li>
         <li><a href="../index.html">Standings</a></li>
         <li><a href="predict.html">Predict</a></li>
         <li><a href="project.html">Projection</a></li>
@@ -20,6 +21,7 @@
         <div class="input">
             <h2>Input</h2>
             <p>Enter the results for the next race and see how the standings change!</p>
+            <div id="errorYear" style="color: red;"></div>
             <input type="number" id="year" placeholder="Enter the year">
             <button onclick="saveInput()">Submit</button><br>
             <table id="itable">

@@ -38,6 +38,7 @@ async function getUser() {
         pointsArr.push(dStands[i].points);
         winArr.push(dStands[i].wins);
         c4.innerHTML = p;
+        polesAr.push(p);
 
     }
 }
@@ -69,9 +70,14 @@ async function getPoles() {
 }
 async function saveInput() {
     var y = document.getElementById('year');
-    year = y.value;
-    await getUser();
-    getDrivers();
+    if (y.value < 1955 || y.value > new Date().getFullYear()) {
+        document.getElementById('errorYear').innerText = 'Input must be from 1955-present.';
+    } else {
+        document.getElementById('errorYear').innerText = '';
+        year = y.value;
+        await getUser();
+        getDrivers();
+    }
 }
 function getDrivers() {
     const selectElement1 = document.getElementById('driv1');
@@ -97,38 +103,43 @@ function getDrivers() {
 async function compInput() {
     var d1 = (document.getElementById('driv1')).value;
     var d2 = (document.getElementById('driv2')).value; 
-    var t = document.getElementById('comp');
-    row = t.rows[0];
-    row.innerHTML = "";
+    if (d1 == d2) {
+        document.getElementById('errorDriv').innerText = 'Inputs must be different people.';
+    } else {
+        document.getElementById('errorDriv').innerText = '';
+        var t = document.getElementById('comp');
+        row = t.rows[0];
+        row.innerHTML = "";
 
-    var c1 = document.createElement('th');
-    c1.innerHTML = 'Points';
-    row.appendChild(c1);
-    var c2 = row.insertCell(1);
-    var c3 = row.insertCell(2);
-    c2.innerHTML = pointsArr[d1];
-    c3.innerHTML = pointsArr[d2];
-    row = t.rows[1];
-    row.innerHTML = "";
+        var c1 = document.createElement('th');
+        c1.innerHTML = 'Points';
+        row.appendChild(c1);
+        var c2 = row.insertCell(1);
+        var c3 = row.insertCell(2);
+        c2.innerHTML = pointsArr[d1];
+        c3.innerHTML = pointsArr[d2];
+        row = t.rows[1];
+        row.innerHTML = "";
 
-    c1 = document.createElement('th');
-    c1.innerHTML = 'Wins';
-    row.appendChild(c1);
-    c2 = row.insertCell(1);
-    c3 = row.insertCell(2);
-    c2.innerHTML = winArr[d1];
-    c3.innerHTML = winArr[d2];
+        c1 = document.createElement('th');
+        c1.innerHTML = 'Wins';
+        row.appendChild(c1);
+        c2 = row.insertCell(1);
+        c3 = row.insertCell(2);
+        c2.innerHTML = winArr[d1];
+        c3.innerHTML = winArr[d2];
 
-    row = t.rows[2];
-    row.innerHTML = "";
-    c1 = document.createElement('th');
-    c1.innerHTML = 'Poles';
-    row.appendChild(c1);
-    c2 = row.insertCell(1);
-    c3 = row.insertCell(2);
-    c2.innerHTML = polesAr[d1];
-    c3.innerHTML = polesAr[d2];
-    compColor();
+        row = t.rows[2];
+        row.innerHTML = "";
+        c1 = document.createElement('th');
+        c1.innerHTML = 'Poles';
+        row.appendChild(c1);
+        c2 = row.insertCell(1);
+        c3 = row.insertCell(2);
+        c2.innerHTML = polesAr[d1];
+        c3.innerHTML = polesAr[d2];
+        compColor();
+    }
 }
 
 function compColor() { 
