@@ -122,6 +122,8 @@ async function saveInput() {
     const raceInput = document.getElementById('r');
     if (raceInput.value <= 0) {
         document.getElementById('errorRace').innerText = 'Input must be greater than 1.';
+    } else if (((raceInput.value * 26) + Number(pointsArr[pointsArr.length - 1]) > Number(pointsArr[0]))) {
+        document.getElementById('errorRace').innerText = 'Input is too big, everyone can win.';
     } else {
         document.getElementById('errorRace').innerText = '';
         if (raceInput.value.trim() === '') return;
