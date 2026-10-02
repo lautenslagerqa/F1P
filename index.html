@@ -43,15 +43,17 @@
             <h2>Head-to-Head</h2>
             <p>Compare two drivers in the selected season</p>
             <div id="errorDriv" style="color: red;"></div>
-            <label for="driv1">Driver 1:</label>
-            <select name="driv1" id="driv1">
-                <option value="" disabled selected>Select an driver</option>
-            </select>
-            <label for="driv2">Driver 2:</label>
-            <select name="driv2" id="driv2">
-                <option value="" disabled selected>Select an driver</option>
-            </select>
-            <button onclick="compInput()">Submit</button><br>
+            <div id="drivs">
+                <button onclick="compInput()">Submit</button>
+                <label for="driv1">Driver 1:
+                <select name="driv1" id="driv1">
+                    <option value="" disabled selected>Select an driver</option>
+                </select></label>
+                <label for="driv2">Driver 2:
+                <select name="driv2" id="driv2">
+                    <option value="" disabled selected>Select an driver</option>
+                </select></label>
+            </div>
             <table id="comp">
                 <tbody>
                     <tr>

@@ -24,13 +24,14 @@ section {
 }
 .wrapper {
   display: grid;
-  margin: 0% 1% 0% 1%;
+  margin: 0% 1% 0% 0.5%;
   grid-template-columns: 1fr 1fr;
 }
 h1 {
   margin: 0.5% 1% 0% 1%;
   color: #D33F49;
 }
+
 /* h2 {
   color: #D33F49;
   background-image: 
@@ -47,7 +48,7 @@ h1 {
   width: 100%;
   list-style-type: none;
   margin: 0;
-  padding: 0;
+  padding: 0 0 0 0.75%;
   overflow: hidden;
   background-color: #3C1B43;
   display: flex;
@@ -68,7 +69,7 @@ ul li .head {
   /* color: white; */
   text-align: center;
   width: 250px;
-  padding: 4px 5px;
+  padding: 4px 5px 0 2px;
   text-decoration: none;
 }
 ul li a:hover {
@@ -86,14 +87,38 @@ th {
   text-align: left;
 }
 #comp {
-  width: 84%;
+  width: 100%;
+  table-layout: fixed;
 }
 #comp td {
-  padding-right: 25px;
-  padding-left: 25px;
+  width: 35%;
+  text-align: center;
+}
+#comp th:first-child {
+  width: 30%;
   text-align: left;
 }
-
+#drivs {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 30% 35% 35%;
+}
+#drivs label {
+  display: flex;
+  flex-direction: column;
+}
+#driv1, #driv2 {
+  width: 100%;
+  box-sizing: border-box;
+}
+#drivs button {
+  grid-column: 1;
+  justify-self: start;
+  align-self: end;
+}
 #comp td :not(:first-child) {
   text-align: center;
+}
+.stnds {
+  margin-left: 0;
 }
