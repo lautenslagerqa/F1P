@@ -1,46 +1,62 @@
+/**
+ * Championship prediction helper.
+ *
+ * Reads the current season standings and calculates which drivers are still in
+ * mathematical contention for the title with a user-specified number of races remaining.
+ */
 const base_url = "https://api.jolpi.ca/ergast/f1/";
-var year = 2026;
-var drivers = [];
-var dID = [];
-var pointsArr = [];
-var polesAr = [];
-var winArr = [];
-let rr = 0;
-async function getUser() { //makes table on pages and addes to data arrays
-    var api_url = `${base_url}${year}/driverstandings/`;
+let year = 2026;
+let drivers = [];
+let dID = [];
+let pointsArr = [];
+let polesAr = [];
+let winArr = [];
+let remainingRaces = 0;
+/**
+ * Loads the season standings and keeps the arrays used by the prediction UI in sync.
+ */
+async function getUser() {
+    const api_url = `${base_url}${year}/driverstandings/`;
     const [response, poleCounts] = await Promise.all([fetch(api_url), getPoles()]);
     const data = await response.json();
-    //console.log(data.MRData.StandingsTable.StandingsLists);
     const stands = data.MRData.StandingsTable.StandingsLists[0];
     const dStands = stands.DriverStandings;
-    const l = dStands.length;
+
     drivers = [];
     polesAr = [];
-    const fst = stands.DriverStandings[0]
-    //document.querySelector('#head').innerHTML = fst.Driver.givenName;
-    var table = document.getElementById("tab").getElementsByTagName('tbody')[0];
+    dID = [];
+    pointsArr = [];
+    winArr = [];
+
+    const table = document.getElementById("tab").getElementsByTagName('tbody')[0];
     document.getElementById('tbod').innerHTML = '';
-    for (let i = 0; i < l; i++) {
-        var newRow = table.insertRow();
-        var p1 = newRow.insertCell(0);
-        var c1 = newRow.insertCell(1);
-        var c2 = newRow.insertCell(2);
-        var c3 = newRow.insertCell(3);
-        var c4 = newRow.insertCell(4);
-        let position = i+1;
-        p1.textContent = `${position}${(position) === 1 ? 'st' : position === 2 ? 'nd' : position === 3 ? 'rd' : 'th'}`;
-        c1.innerHTML = `<button class="fill" onclick="champChance(${i})">${dStands[i].Driver.familyName}</button>`;
-        c2.innerHTML = dStands[i].points;
-        c3.innerHTML = dStands[i].wins;
-        var p = poleCounts[dStands[i].Driver.driverId] || 0;
+
+    for (let i = 0; i < dStands.length; i++) {
+        const newRow = table.insertRow();
+        const positionCell = newRow.insertCell(0);
+        const nameCell = newRow.insertCell(1);
+        const pointsCell = newRow.insertCell(2);
+        const winsCell = newRow.insertCell(3);
+        const polesCell = newRow.insertCell(4);
+        const position = i + 1;
+
+        positionCell.textContent = `${position}${position === 1 ? 'st' : position === 2 ? 'nd' : position === 3 ? 'rd' : 'th'}`;
+        nameCell.innerHTML = `<button class="fill" onclick="champChance(${i})">${dStands[i].Driver.familyName}</button>`;
+        pointsCell.innerHTML = dStands[i].points;
+        winsCell.innerHTML = dStands[i].wins;
+
+        const poleCount = poleCounts[dStands[i].Driver.driverId] || 0;
         drivers.push(dStands[i].Driver.familyName);
         dID.push(dStands[i].Driver.driverId);
-        pointsArr.push(dStands[i].points);
-        winArr.push(dStands[i].wins);
-        c4.innerHTML = p;
-
+        pointsArr.push(Number(dStands[i].points));
+        winArr.push(Number(dStands[i].wins));
+        polesCell.innerHTML = poleCount;
+        polesAr.push(poleCount);
     }
 }
+/**
+ * Counts all pole positions for each driver in the selected season.
+ */
 async function getPoles() {
     const pageSize = 100;
     const firstResponse = await fetch(`${base_url}${year}/qualifying/?limit=${pageSize}`);
@@ -50,78 +66,97 @@ async function getPoles() {
         Array.from({ length: Math.ceil((total - pageSize) / pageSize) }, (_, page) => {
             const offset = (page + 1) * pageSize;
             return fetch(`${base_url}${year}/qualifying/?limit=${pageSize}&offset=${offset}`)
-                .then(response => response.json());
+                .then((response) => response.json());
         })
     );
+
     const poleCounts = {};
     for (const page of [firstPage, ...remainingPages]) {
         for (const race of page.MRData.RaceTable.Races) {
             for (const result of race.QualifyingResults || []) {
-                if (result.position == 1) {
+                if (Number(result.position) === 1) {
                     const driverId = result.Driver.driverId;
                     poleCounts[driverId] = (poleCounts[driverId] || 0) + 1;
                 }
             }
         }
     }
+
     return poleCounts;
 }
 
+/**
+ * Fetches the number of races still remaining in the active season.
+ */
 async function getRemainingRaces() {
     const response = await fetch(`https://api.jolpi.ca/ergast/f1/${year}/races`);
     const data = await response.json();
     const races = data.MRData.RaceTable.Races || [];
     const today = new Date();
- 
-    const upcomingRaces = races.filter(race => new Date(race.date) > today);
-    rr = upcomingRaces.length;
-    console.log(`Remaining races: ${upcomingRaces.length}`);
-    document.getElementById("rr").textContent = `Remaining Races: ${upcomingRaces.length}`;
-    document.getElementById("r").value = rr;
-}
- 
-function elimDrivers() {
-    var table = document.getElementById("el").getElementsByTagName('tbody')[0];
-    table.innerHTML = '';
-    for (let i = 0; i < drivers.length; i++) {
-        let newPoints = (26 * rr) + Number(pointsArr[i]);
-        if (newPoints < Number(pointsArr[0])) {
-            console.log(drivers[i] + ` : ${pointsArr[i]} : ${newPoints} : ${rr}`);
-            let row = table.insertRow();
-            let c1 = row.insertCell();
-            c1.textContent = drivers[i];
 
+    const upcomingRaces = races.filter((race) => new Date(race.date) > today);
+    remainingRaces = upcomingRaces.length;
+    document.getElementById("rr").textContent = `Remaining Races: ${remainingRaces}`;
+    document.getElementById("r").value = remainingRaces;
+}
+
+/**
+ * Lists drivers whose championship hopes would end if all remaining races were scored as a win.
+ */
+function elimDrivers() {
+    const table = document.getElementById("el").getElementsByTagName('tbody')[0];
+    table.innerHTML = '';
+
+    for (let i = 0; i < drivers.length; i++) {
+        const projectedPoints = (26 * remainingRaces) + Number(pointsArr[i]);
+        if (projectedPoints < Number(pointsArr[0])) {
+            const row = table.insertRow();
+            const driverCell = row.insertCell();
+            driverCell.textContent = drivers[i];
         }
     }
 }
 
+/**
+ * Calculates the point gap required for a driver to reach the current leader.
+ */
 function champChance(id) {
-    let gap = pointsArr[0] - pointsArr[id];
-    let txt = document.getElementById("errorRace");
-    txt.textContent = `${drivers[id]} needs to gain ${gap} points on ${drivers[0]} to win the championship`;
+    const gap = pointsArr[0] - pointsArr[id];
+    const message = document.getElementById("errorRace");
+    message.textContent = `${drivers[id]} needs to gain ${gap} points on ${drivers[0]} to win the championship`;
 }
 
-
-async function saveInput() { //gets input of year
-    // var y = document.getElementById('y');
-    // year = y.value;
+/**
+ * Validates user-entered race totals and updates the prediction model.
+ */
+async function saveInput() {
     const raceInput = document.getElementById('r');
+
     if (raceInput.value <= 0) {
         document.getElementById('errorRace').innerText = 'Input must be greater than 1.';
-    } else if (((raceInput.value * 26) + Number(pointsArr[pointsArr.length - 1]) > Number(pointsArr[0]))) {
-        document.getElementById('errorRace').innerText = 'Input is too big, everyone can win.';
-    } else {
-        document.getElementById('errorRace').innerText = '';
-        if (raceInput.value.trim() === '') return;
-        const requestedRaces = Number(raceInput.value);
-        if (!Number.isInteger(requestedRaces) || requestedRaces < 0) return;
-        rr = requestedRaces;
-        await Promise.all([getUser()]);
-        elimDrivers();
+        return;
     }
+
+    if (((Number(raceInput.value) * 26) + Number(pointsArr[pointsArr.length - 1]) > Number(pointsArr[0]))) {
+        document.getElementById('errorRace').innerText = 'Input is too big, everyone can win.';
+        return;
+    }
+
+    document.getElementById('errorRace').innerText = '';
+    if (raceInput.value.trim() === '') return;
+
+    const requestedRaces = Number(raceInput.value);
+    if (!Number.isInteger(requestedRaces) || requestedRaces < 0) return;
+
+    remainingRaces = requestedRaces;
+    await Promise.all([getUser()]);
+    elimDrivers();
 }
 
-async function initPrediction() { //initial running of function
+/**
+ * Initial page load: fetch the current standings and prediction state.
+ */
+async function initPrediction() {
     await Promise.all([getRemainingRaces(), getUser()]);
     elimDrivers();
 }
