@@ -297,10 +297,6 @@ tbody tr:hover {
     padding: 12px 18px;
   }
 
-  #nav li:last-child {
-    margin-left: auto;
-  }
-
   #drivs {
     grid-template-columns: 1fr;
   }
