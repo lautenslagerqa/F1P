@@ -29,7 +29,7 @@ async function getUser() { //makes table on pages and addes to data arrays
         var c4 = newRow.insertCell(4);
         let position = i+1;
         p1.textContent = `${position}${(position) === 1 ? 'st' : position === 2 ? 'nd' : position === 3 ? 'rd' : 'th'}`;
-        c1.innerHTML = dStands[i].Driver.familyName;
+        c1.innerHTML = `<button class="fill" onclick="champChance(${i})">${dStands[i].Driver.familyName}</button>`;
         c2.innerHTML = dStands[i].points;
         c3.innerHTML = dStands[i].wins;
         var p = poleCounts[dStands[i].Driver.driverId] || 0;
@@ -66,27 +66,7 @@ async function getPoles() {
     }
     return poleCounts;
 }
-// function getDrivers() {
-//     const selectElement1 = document.getElementById('driv1');
-//     selectElement1.innerHTML = '';
-//     const selectElement2 = document.getElementById('driv2');
-//     selectElement2.innerHTML = '';
-//     for (let i = 0; i < drivers.length; i++) {
-//         var option = drivers[i];
-//         //console.log(option);
-//         const newOption1 = document.createElement('option');
-//         newOption1.value = i; 
-//         newOption1.textContent = option;
-//         const newOption2 = document.createElement('option');
-//         newOption2.value = i; 
-//         newOption2.textContent = option;
-//         selectElement1.appendChild(newOption1);
-//         selectElement2.appendChild(newOption2);
-//     }
-//     drivers.forEach(option => {
-//     });
 
-// }
 async function getRemainingRaces() {
     const response = await fetch(`https://api.jolpi.ca/ergast/f1/${year}/races`);
     const data = await response.json();
@@ -113,6 +93,12 @@ function elimDrivers() {
 
         }
     }
+}
+
+function champChance(id) {
+    let gap = pointsArr[0] - pointsArr[id];
+    let txt = document.getElementById("errorRace");
+    txt.textContent = `${drivers[id]} needs to gain ${gap} points on ${drivers[0]} to win the championship`;
 }
 
 
