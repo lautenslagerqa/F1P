@@ -192,12 +192,12 @@ function compColor() {
         const secondValue = Number(row.cells[2].innerText);
 
         if (firstValue > secondValue) {
-            row.cells[1].style.backgroundColor = 'lightblue';
+            row.cells[1].style.background = '#e11d48';
         } else if (firstValue === secondValue) {
-            row.cells[1].style.backgroundColor = 'lightgray';
-            row.cells[2].style.backgroundColor = 'lightgray';
-        } else {
-            row.cells[2].style.backgroundColor = 'lightblue';
+            row.cells[1].style.backgroundColor = 'rgba(225, 29, 72, 0.18)';
+            row.cells[2].style.backgroundColor = 'rgba(225, 29, 72, 0.18)';
+        } else { 
+            row.cells[2].style.background = '#e11d48';
         }
     }
 }
