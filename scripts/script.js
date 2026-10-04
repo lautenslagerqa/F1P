@@ -6,7 +6,7 @@ var dID = [];
 var pointsArr = [];
 var polesAr = [];
 var winArr = [];
-async function getUser() {
+async function getUser() { //saves drivers and other data to arrays and makes table on page
     var api_url = `${base_url}${year}/driverstandings/`;
     const [response, poleCounts] = await Promise.all([fetch(api_url), getPoles()]);
     const data = await response.json();
@@ -68,7 +68,7 @@ async function getPoles() {
     }
     return poleCounts;
 }
-async function saveInput() {
+async function saveInput() { //gets year input and checks if it's correct
     var y = document.getElementById('year');
     if (y.value < 1955 || y.value > new Date().getFullYear()) {
         document.getElementById('errorYear').innerText = 'Input must be from 1955-present.';

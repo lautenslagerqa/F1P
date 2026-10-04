@@ -6,7 +6,7 @@ var pointsArr = [];
 var polesAr = [];
 var winArr = [];
 let rr = 0;
-async function getUser() {
+async function getUser() { //makes table on pages and addes to data arrays
     var api_url = `${base_url}${year}/driverstandings/`;
     const [response, poleCounts] = await Promise.all([fetch(api_url), getPoles()]);
     const data = await response.json();
@@ -116,7 +116,7 @@ function elimDrivers() {
 }
 
 
-async function saveInput() {
+async function saveInput() { //gets input of year
     // var y = document.getElementById('y');
     // year = y.value;
     const raceInput = document.getElementById('r');
@@ -135,7 +135,7 @@ async function saveInput() {
     }
 }
 
-async function initPrediction() {
+async function initPrediction() { //initial running of function
     await Promise.all([getRemainingRaces(), getUser()]);
     elimDrivers();
 }
