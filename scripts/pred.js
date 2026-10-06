@@ -15,6 +15,20 @@ let remainingRaces = 0;
 /**
  * Loads the season standings and keeps the arrays used by the prediction UI in sync.
  */
+// Select the input field and the button
+const input = document.getElementById("r");
+const button = document.getElementById("smt");
+
+// Listen for a keydown event inside the input field
+input.addEventListener("keydown", function(event) {
+  // Check if the pressed key is "Enter"
+  if (event.key === "Enter") {
+    // Prevent the default form submission behavior (if inside a form)
+    event.preventDefault();
+    // Programmatically click the button
+    button.click();
+  }
+});
 async function getUser() {
     const api_url = `${base_url}${year}/driverstandings/`;
     const [response, poleCounts] = await Promise.all([fetch(api_url), getPoles()]);

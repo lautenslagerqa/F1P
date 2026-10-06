@@ -5,6 +5,20 @@
  * This script loads the standings for a selected year and compares key metrics
  * such as points, wins, and poles between two drivers for quick side-by-side analysis.
  */
+// Select the input field and the button
+const input = document.getElementById("year");
+const button = document.getElementById("smt");
+
+// Listen for a keydown event inside the input field
+input.addEventListener("keydown", function(event) {
+  // Check if the pressed key is "Enter"
+  if (event.key === "Enter") {
+    // Prevent the default form submission behavior (if inside a form)
+    event.preventDefault();
+    // Programmatically click the button
+    button.click();
+  }
+});
 const base_url = "https://api.jolpi.ca/ergast/f1/";
 let year = 2026;
 let drivers = [];

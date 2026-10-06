@@ -14,7 +14,20 @@ let pointsArr = [];
 let polesAr = [];
 let winArr = [];
 const positionPoints = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1, 0];
+// Select the input field and the button
+const input = document.getElementById("year");
+const button = document.getElementById("smt");
 
+// Listen for a keydown event inside the input field
+input.addEventListener("keydown", function(event) {
+  // Check if the pressed key is "Enter"
+  if (event.key === "Enter") {
+    // Prevent the default form submission behavior (if inside a form)
+    event.preventDefault();
+    // Programmatically click the button
+    button.click();
+  }
+});
 /**
  * Fetches the current season driver standings and populates the table.
  * Also stores driver metadata so projected results can be recalculated.
