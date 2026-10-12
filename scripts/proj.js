@@ -51,12 +51,13 @@ async function getUser() {
     for (let i = 0; i < dStands.length; i++) {
         const row = table.insertRow();
         row.dataset.driverIndex = i;
+        const posCell = row.insertCell(0);
+        const nameCell = row.insertCell(1);
+        const pointsCell = row.insertCell(2);
+        const winsCell = row.insertCell(3);
+        const polesCell = row.insertCell(4);
 
-        const nameCell = row.insertCell(0);
-        const pointsCell = row.insertCell(1);
-        const winsCell = row.insertCell(2);
-        const polesCell = row.insertCell(3);
-
+        posCell.textContent = `${i+1}${i+1 === 1 ? 'st' : i+1 === 2 ? 'nd' : i+1 === 3 ? 'rd' : 'th'}`;
         nameCell.innerHTML = dStands[i].Driver.familyName;
         pointsCell.innerHTML = dStands[i].points;
         winsCell.innerHTML = dStands[i].wins;
