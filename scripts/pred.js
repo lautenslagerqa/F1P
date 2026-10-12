@@ -8,6 +8,7 @@ const base_url = "https://api.jolpi.ca/ergast/f1/";
 let year = 2026;
 let drivers = [];
 let dID = [];
+let elimDriv = [];
 let pointsArr = [];
 let polesAr = [];
 let winArr = [];
@@ -118,6 +119,7 @@ async function getRemainingRaces() {
  * Lists drivers whose championship hopes would end if all remaining races were scored as a win.
  */
 function elimDrivers() {
+    elimDriv = [];
     const table = document.getElementById("el").getElementsByTagName('tbody')[0];
     table.innerHTML = '';
 
@@ -127,6 +129,8 @@ function elimDrivers() {
             const row = table.insertRow();
             const driverCell = row.insertCell();
             driverCell.textContent = drivers[i];
+            elimDriv.push(drivers[i]);
+            console.log(drivers[i]);
         }
     }
 }
@@ -137,7 +141,11 @@ function elimDrivers() {
 function champChance(id) {
     const gap = pointsArr[0] - pointsArr[id];
     const message = document.getElementById("errorRace");
-    message.textContent = `${drivers[id]} needs to gain ${gap} points on ${drivers[0]} to win the championship`;
+    if (elimDriv.length + 1 == drivers.length) {
+        message.textContent = `${drivers[0]} is confirmed to be the champion`;
+    } else {
+        message.textContent = `${drivers[id]} needs to gain ${gap} points on ${drivers[0]} to win the championship`;
+    }
 }
 
 /**
@@ -165,6 +173,11 @@ async function saveInput() {
     remainingRaces = requestedRaces;
     await Promise.all([getUser()]);
     elimDrivers();
+    const message = document.getElementById("errorRace");
+    if (elimDriv.length + 1 == drivers.length) {
+        message.textContent = `${drivers[0]} is confirmed to be the champion`;
+    }
+    
 }
 
 /**
