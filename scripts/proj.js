@@ -57,7 +57,7 @@ async function getUser() {
         const winsCell = row.insertCell(3);
         const polesCell = row.insertCell(4);
 
-        posCell.textContent = `${i+1}${i+1 === 1 ? 'st' : i+1 === 2 ? 'nd' : i+1 === 3 ? 'rd' : 'th'}`;
+        posCell.textContent = `${i+1}${i+1 === 1 ? 'st' : i+1 === 2 ? 'nd' : i+1 === 3 ? 'rd' : i+1 === 21 ? 'st': 'th'}`;
         nameCell.innerHTML = dStands[i].Driver.familyName;
         pointsCell.innerHTML = dStands[i].points;
         winsCell.innerHTML = dStands[i].wins;

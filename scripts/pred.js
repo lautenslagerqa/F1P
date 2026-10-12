@@ -55,7 +55,7 @@ async function getUser() {
         const polesCell = newRow.insertCell(4);
         const position = i + 1;
 
-        positionCell.textContent = `${position}${position === 1 ? 'st' : position === 2 ? 'nd' : position === 3 ? 'rd' : 'th'}`;
+        positionCell.textContent = `${position}${position === 1 ? 'st' : position === 2 ? 'nd' : position === 3 ? 'rd' : position === 21 ? 'st' : 'th'}`;
         nameCell.innerHTML = `<button class="fill" onclick="champChance(${i})">${dStands[i].Driver.familyName}</button>`;
         pointsCell.innerHTML = dStands[i].points;
         winsCell.innerHTML = dStands[i].wins;
