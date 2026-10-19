@@ -8,6 +8,8 @@ const base_url = "https://api.jolpi.ca/ergast/f1/";
 let year = 2026;
 let drivers = [];
 let dID = [];
+let tempStandings = [];
+let recentPoints = [];
 let elimDriv = [];
 let pointsArr = [];
 let polesAr = [];
@@ -40,8 +42,10 @@ async function getUser() {
     drivers = [];
     polesAr = [];
     dID = [];
+    tempStandings = [];
     pointsArr = [];
     winArr = [];
+    const completedRounds = Number(stands.round);
 
     const table = document.getElementById("tab").getElementsByTagName('tbody')[0];
     document.getElementById('tbod').innerHTML = '';
@@ -64,9 +68,17 @@ async function getUser() {
         drivers.push(dStands[i].Driver.familyName);
         dID.push(dStands[i].Driver.driverId);
         pointsArr.push(Number(dStands[i].points));
+        tempStandings.push(Number(dStands[i].points) / completedRounds);
         winArr.push(Number(dStands[i].wins));
         polesCell.innerHTML = poleCount;
         polesAr.push(poleCount);
+    }
+
+    if (dStands.length > 0) {
+        await getRecentPoints(stands.round);
+        displayMostLikelyWinner();
+    } else {
+        document.getElementById("winner").textContent = "No recent race data available.";
     }
 }
 /**
@@ -98,6 +110,68 @@ async function getPoles() {
     }
 
     return poleCounts;
+}
+
+
+
+/**
+ * Totals each driver's points from the requested race and the two races before it.
+ */
+async function getRecentPoints(number) {
+    const latestRound = Number(number);
+    if (!Number.isInteger(latestRound) || latestRound < 1) {
+        throw new RangeError("Race number must be a positive integer.");
+    }
+    const firstRound = Math.max(1, latestRound - 2);
+    const recentRaceCount = latestRound - firstRound + 1;
+    const raceResults = await Promise.all(
+        Array.from({ length: latestRound - firstRound + 1 }, (_, index) =>
+            fetch(`${base_url}${year}/${firstRound + index}/results`)
+        )
+    );
+    const raceData = await Promise.all(raceResults.map(async (response) => {
+        if (!response.ok) {
+            throw new Error(`Failed to fetch race results: ${response.status}`);
+        }
+        return response.json();
+    }));
+
+    const pointsByDriver = new Map(dID.map((driverId) => [driverId, 0]));
+    for (const data of raceData) {
+        const races = data.MRData.RaceTable.Races || [];
+        for (const race of races) {
+            for (const result of race.Results || []) {
+                const driverId = result.Driver.driverId;
+                if (pointsByDriver.has(driverId)) {
+                    pointsByDriver.set(
+                        driverId,
+                        pointsByDriver.get(driverId) + Number(result.points)
+                    );
+                }
+            }
+        }
+    }
+
+    recentPoints = dID.map((driverId) => pointsByDriver.get(driverId) / recentRaceCount);
+}
+
+/**
+ * Displays the driver with the highest combined season and recent points average.
+ */
+function displayMostLikelyWinner() {
+    if (recentPoints.length === 0 || tempStandings.length !== recentPoints.length) {
+        document.getElementById("winner").textContent = "No recent race data available.";
+        return;
+    }
+
+    const combinedAverages = recentPoints.map(
+        (recentAverage, index) => (recentAverage * 0.6 + tempStandings[index] * 0.4) / 2
+    );
+    const highestAverage = Math.max(...combinedAverages);
+    const likelyWinners = combinedAverages
+        .map((average, index) => average === highestAverage ? drivers[index] : null)
+        .filter((driver) => driver !== null);
+    document.getElementById("winner").textContent = likelyWinners.join(" / ");
 }
 
 /**

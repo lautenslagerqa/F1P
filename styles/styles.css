@@ -38,7 +38,7 @@ img {
   display: block;
 }
 
-.wrapper {
+.wrapper, .mostLikely {
   max-width: 1200px;
   margin: 110px auto 40px;
   padding: 0 20px;
