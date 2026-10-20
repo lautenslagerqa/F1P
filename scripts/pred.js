@@ -76,7 +76,7 @@ async function getUser() {
 
     if (dStands.length > 0) {
         await getRecentPoints(stands.round);
-        displayMostLikelyWinner();
+        await displayMostLikelyWinner();
     } else {
         document.getElementById("winner").textContent = "No recent race data available.";
     }
@@ -158,7 +158,7 @@ async function getRecentPoints(number) {
 /**
  * Displays the driver with the highest combined season and recent points average.
  */
-function displayMostLikelyWinner() {
+async function displayMostLikelyWinner() {
     if (recentPoints.length === 0 || tempStandings.length !== recentPoints.length) {
         document.getElementById("winner").textContent = "No recent race data available.";
         return;
@@ -168,11 +168,24 @@ function displayMostLikelyWinner() {
         (recentAverage, index) => (recentAverage * 0.6 + tempStandings[index] * 0.4) / 2
     );
     const highestAverage = Math.max(...combinedAverages);
-    const likelyWinners = combinedAverages
-        .map((average, index) => average === highestAverage ? drivers[index] : null)
-        .filter((driver) => driver !== null);
+    const likelyWinnerIndexes = combinedAverages
+        .map((average, index) => average === highestAverage ? index : null)
+        .filter((index) => index !== null);
+    const likelyWinners = await Promise.all(likelyWinnerIndexes.map(getDriverInfo));
     document.getElementById("winner").textContent = likelyWinners.join(" / ");
 }
+
+/**
+ * Gets info for a driver id to return more data to dipslay
+ */
+async function getDriverInfo(ID) {
+    const firstResponse = await fetch(`${base_url}${year}/drivers/${dID[ID]}`);
+    const firstPage = await firstResponse.json();
+    const driver = firstPage.MRData.DriverTable.Drivers[0];
+    return `#${driver.permanentNumber} ${driver.givenName} ${driver.familyName}`;
+    
+}
+
 
 /**
  * Fetches the number of races still remaining in the active season.
