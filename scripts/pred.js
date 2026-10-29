@@ -230,10 +230,55 @@ function elimDrivers() {
 function champChance(id) {
     const gap = pointsArr[0] - pointsArr[id];
     const message = document.getElementById("errorRace");
+    message.innerHTML = '';
     if (elimDriv.length + 1 == drivers.length) {
-        message.textContent = `${drivers[0]} is confirmed to be the champion`;
+        message.innerHTML = `${drivers[0]} is confirmed to be the champion`;
     } else {
-        message.textContent = `${drivers[id]} needs to gain ${gap} points on ${drivers[0]} to win the championship`;
+        message.innerHTML += `${drivers[id]} needs to gain ${gap} points on ${drivers[0]} to win the championship.`;
+        switch (true) {
+            case gap < 7:
+                message.innerHTML += '<br>';
+                message.innerHTML += `This is equal to ${drivers[id]} finishing 1st and ${drivers[0]} fininished 2nd or below.`; 
+                break;
+            case gap < 10:
+                message.innerHTML += '<br>';
+                message.innerHTML += `This is equal to ${drivers[id]} finishing 1st and ${drivers[0]} fininished 3rd or below.`; 
+                break;
+            case gap < 13:
+                message.innerHTML += '<br>';
+                message.innerHTML += `This is equal to ${drivers[id]} finishing 1st and ${drivers[0]} fininished 4th or below.`; 
+                break;
+            case gap < 15:
+                message.innerHTML += '<br>';
+                message.innerHTML += `This is equal to ${drivers[id]} finishing 1st and ${drivers[0]} fininished 5th or below.`; 
+                break;
+            case gap < 17:
+                message.innerHTML += '<br>';
+                message.innerHTML += `This is equal to ${drivers[id]} finishing 1st and ${drivers[0]} fininished 6th or below.`; 
+                break;
+            case gap < 19:
+                message.innerHTML += '<br>';
+                message.innerHTML += `This is equal to ${drivers[id]} finishing 1st and ${drivers[0]} fininished 7th or below.`; 
+                break;
+            case gap < 21:
+                message.innerHTML += '<br>';
+                message.innerHTML += `This is equal to ${drivers[id]} finishing 1st and ${drivers[0]} fininished 8th or below.`; 
+                break;
+            case gap < 23:
+                message.innerHTML += '<br>';
+                message.innerHTML += `This is equal to ${drivers[id]} finishing 1st and ${drivers[0]} fininished 9th or below.`; 
+                break;
+            case gap == 23:
+                message.innerHTML += '<br>';
+                message.innerHTML += `This is equal to ${drivers[id]} finishing 1st and ${drivers[0]} fininished 10th or below.`; 
+                break;
+
+            case gap == 24:
+                message.innerHTML += '<br>';
+                message.innerHTML += `This is equal to ${drivers[id]} finishing 1st and ${drivers[0]} fininished 11th or below.`; 
+                break;
+            
+        }
     }
 }
 
@@ -244,16 +289,18 @@ async function saveInput() {
     const raceInput = document.getElementById('r');
 
     if (raceInput.value <= 0) {
+        document.getElementById('errorRace').innerHTML = '';
         document.getElementById('errorRace').innerText = 'Input must be greater than 1.';
         return;
     }
 
     if (((Number(raceInput.value) * 26) + Number(pointsArr[pointsArr.length - 1]) > Number(pointsArr[0]))) {
+        document.getElementById('errorRace').innerHTML = '';
         document.getElementById('errorRace').innerText = 'Input is too big, everyone can win.';
         return;
     }
 
-    document.getElementById('errorRace').innerText = '';
+    document.getElementById('errorRace').innerHTML = '';
     if (raceInput.value.trim() === '') return;
 
     const requestedRaces = Number(raceInput.value);
