@@ -15,6 +15,7 @@ let pointsArr = [];
 let polesAr = [];
 let winArr = [];
 let remainingRaces = 0;
+let roundNum = 0;
 /**
  * Loads the season standings and keeps the arrays used by the prediction UI in sync.
  */
@@ -73,6 +74,7 @@ async function getUser() {
         polesCell.innerHTML = poleCount;
         polesAr.push(poleCount);
     }
+    getNextRoundName(stands.round);
 
     if (dStands.length > 0) {
         await getRecentPoints(stands.round);
@@ -266,6 +268,17 @@ async function saveInput() {
     }
     
 }
+
+
+async function getNextRoundName(round) {
+    const response = await fetch(`https://api.jolpi.ca/ergast/f1/${year}/races`);
+    const data = await response.json();
+    let race = data.MRData.RaceTable.Races[round];
+    let h3 = document.getElementById("raceName");
+    h3.textContent = race.raceName;
+    
+}
+
 
 /**
  * Initial page load: fetch the current standings and prediction state.
