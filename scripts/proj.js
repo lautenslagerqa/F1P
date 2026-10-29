@@ -164,11 +164,11 @@ function updateStandings() {
 
     standingRows.forEach((row) => {
         const driverIndex = Number(row.dataset.driverIndex);
-        row.cells[1].textContent = projectedPoints[driverIndex];
+        row.cells[2].textContent = projectedPoints[driverIndex];
     });
 
     [...standingRows]
-        .sort((rowA, rowB) => Number(rowB.cells[1].textContent) - Number(rowA.cells[1].textContent))
+        .sort((rowA, rowB) => Number(rowB.cells[2].textContent) - Number(rowA.cells[2].textContent))
         .forEach((row) => document.getElementById('tbod').appendChild(row));
 }
 
