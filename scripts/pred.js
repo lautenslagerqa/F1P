@@ -272,10 +272,13 @@ function champChance(id) {
                 message.innerHTML += '<br>';
                 message.innerHTML += `This is equal to ${drivers[id]} finishing 1st and ${drivers[0]} fininished 10th or below.`; 
                 break;
-
             case gap == 24:
                 message.innerHTML += '<br>';
                 message.innerHTML += `This is equal to ${drivers[id]} finishing 1st and ${drivers[0]} fininished 11th or below.`; 
+                break;
+            default:
+                message.innerHTML += '<br>';
+                message.innerHTML += `${drivers[id]} needs multiple races to close the gap on ${drivers[0]}.`; 
                 break;
             
         }
