@@ -167,9 +167,28 @@ function updateStandings() {
         row.cells[2].textContent = projectedPoints[driverIndex];
     });
 
+    const tableBody = document.getElementById('tbod');
     [...standingRows]
-        .sort((rowA, rowB) => Number(rowB.cells[2].textContent) - Number(rowA.cells[2].textContent))
-        .forEach((row) => document.getElementById('tbod').appendChild(row));
+        .sort((rowA, rowB) =>
+            Number(rowB.cells[2].textContent) - Number(rowA.cells[2].textContent) ||
+            Number(rowA.dataset.driverIndex) - Number(rowB.dataset.driverIndex)
+        )
+        .forEach((row, index) => {
+            const position = index + 1;
+            const lastTwoDigits = position % 100;
+            const suffix = lastTwoDigits >= 11 && lastTwoDigits <= 13
+                ? 'th'
+                : position % 10 === 1
+                    ? 'st'
+                    : position % 10 === 2
+                        ? 'nd'
+                        : position % 10 === 3
+                            ? 'rd'
+                            : 'th';
+
+            row.cells[0].textContent = `${position}${suffix}`;
+            tableBody.appendChild(row);
+        });
 }
 
 getUser().then(getDrivers);
