@@ -263,7 +263,7 @@ function elimDrivers() {
     }
     summary.textContent = elimDriv.length === 0
         ? "No drivers are mathematically eliminated with this race count."
-        : `${elimDriv.length} ${elimDriv.length === 1 ? "driver" : "drivers"} mathematically eliminated`;
+        : `${elimDriv.length}/${dID.length} ${elimDriv.length === 1 ? "driver" : "drivers"} mathematically eliminated`;
 
     const message = document.getElementById("errorRace");
     if (elimDriv.length + 1 == drivers.length) {
