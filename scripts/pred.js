@@ -16,6 +16,10 @@ let polesAr = [];
 let winArr = [];
 let remainingRaces = 0;
 let roundNum = 0;
+const driverImageNames = {
+    hulkenberg: "hulkenburg",
+    hirakawa: "ryo_hirakawa"
+};
 /**
  * Loads the season standings and keeps the arrays used by the prediction UI in sync.
  */
@@ -161,8 +165,10 @@ async function getRecentPoints(number) {
  * Displays the driver with the highest combined season and recent points average.
  */
 async function displayMostLikelyWinner() {
+    const driverImage = document.getElementById("driverIMG");
     if (recentPoints.length === 0 || tempStandings.length !== recentPoints.length) {
         document.getElementById("winner").textContent = "No recent race data available.";
+        driverImage.hidden = true;
         return;
     }
 
@@ -175,6 +181,11 @@ async function displayMostLikelyWinner() {
         .filter((index) => index !== null);
     const likelyWinners = await Promise.all(likelyWinnerIndexes.map(getDriverInfo));
     document.getElementById("winner").textContent = likelyWinners.join(" / ");
+    const winnerDriverId = dID[likelyWinnerIndexes[0]];
+    const imageName = driverImageNames[winnerDriverId] || winnerDriverId;
+    driverImage.alt = `Portrait of ${likelyWinners[0]}`;
+    driverImage.src = `../images/drivers/${imageName}.avif`;
+    driverImage.hidden = false;
 }
 
 /**
@@ -209,18 +220,54 @@ async function getRemainingRaces() {
  */
 function elimDrivers() {
     elimDriv = [];
-    const table = document.getElementById("el").getElementsByTagName('tbody')[0];
-    table.innerHTML = '';
+    const list = document.getElementById("el");
+    const summary = document.getElementById("eliminatedSummary");
+    list.replaceChildren();
 
     for (let i = 0; i < drivers.length; i++) {
         const projectedPoints = (26 * remainingRaces) + Number(pointsArr[i]);
         if (projectedPoints < Number(pointsArr[0])) {
-            const row = table.insertRow();
-            const driverCell = row.insertCell();
-            driverCell.textContent = drivers[i];
+            const driverId = dID[i];
+            const imageName = driverImageNames[driverId] || driverId;
+            const item = document.createElement("li");
+            item.className = "eliminated-card";
+
+            const portrait = document.createElement("img");
+            portrait.src = `../images/drivers/${imageName}.avif`;
+            portrait.alt = "";
+            portrait.loading = "lazy";
+            portrait.onerror = () => portrait.remove();
+
+            const details = document.createElement("div");
+            details.className = "eliminated-card-details";
+
+            const name = document.createElement("h3");
+            name.textContent = drivers[i];
+
+            const position = document.createElement("span");
+            position.className = "eliminated-position";
+            position.textContent = `P${i + 1}`;
+
+            const points = document.createElement("p");
+            points.textContent = `${pointsArr[i]} points`;
+
+            const maximum = document.createElement("p");
+            maximum.className = "eliminated-maximum";
+            maximum.textContent = `Maximum possible: ${projectedPoints}`;
+
+            details.append(name, points, maximum);
+            item.append(portrait, details, position);
+            list.append(item);
             elimDriv.push(drivers[i]);
-            console.log(drivers[i]);
         }
+    }
+    summary.textContent = elimDriv.length === 0
+        ? "No drivers are mathematically eliminated with this race count."
+        : `${elimDriv.length} ${elimDriv.length === 1 ? "driver" : "drivers"} mathematically eliminated`;
+
+    const message = document.getElementById("errorRace");
+    if (elimDriv.length + 1 == drivers.length) {
+        message.textContent = `${drivers[0]} is confirmed to be the champion`;
     }
 }
 

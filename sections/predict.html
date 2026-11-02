@@ -25,6 +25,7 @@
         </section>
         <section>
             <h3 id="winner">Loading recent results...</h3>
+            <img id="driverIMG" alt="No Image Available" hidden>
         </section>
         
     </div>
@@ -52,13 +53,8 @@
         </section>
         <section class="elim">
             <h2>Eliminated Drivers</h2>
-            <table id="el">
-                <thead>
-                    <tr><th>Drivers</th></tr>
-                </thead>
-                <tbody id="tb"></tbody>
-
-            </table>
+            <p id="eliminatedSummary" aria-live="polite"></p>
+            <ul id="el" class="eliminated-list" aria-live="polite"></ul>
         </section>
     </div>
 </body>
