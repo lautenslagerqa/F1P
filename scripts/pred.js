@@ -378,6 +378,24 @@ async function getNextRoundName(round) {
 
 
 /**
+ * Checks that the selected year is valid and reloads the data set.
+ */
+async function saveInput() {
+    const yearInput = document.getElementById('year');
+
+    if (yearInput.value < 1955 || yearInput.value > new Date().getFullYear()) {
+        document.getElementById('errorYear').innerText = 'Input must be from 1955-present.';
+        return;
+    }
+
+    document.getElementById('errorYear').innerText = '';
+    year = Number(yearInput.value);
+    await Promise.all([getRemainingRaces(), getUser()]);
+    elimDrivers();
+}
+
+
+/**
  * Initial page load: fetch the current standings and prediction state.
  */
 async function initPrediction() {
