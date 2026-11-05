@@ -184,8 +184,14 @@ async function displayMostLikelyWinner() {
     const winnerDriverId = dID[likelyWinnerIndexes[0]];
     const imageName = driverImageNames[winnerDriverId] || winnerDriverId;
     driverImage.alt = `Portrait of ${likelyWinners[0]}`;
+    driverImage.hidden = true;
+    driverImage.onload = () => {
+        driverImage.hidden = false;
+    };
+    driverImage.onerror = () => {
+        driverImage.hidden = true;
+    };
     driverImage.src = `../images/drivers/${imageName}.avif`;
-    driverImage.hidden = false;
 }
 
 /**
@@ -232,7 +238,14 @@ function elimDrivers() {
             const item = document.createElement("li");
             item.className = "eliminated-card";
 
-            const portrait = document.createElement("img");
+            const portrait = new Image();//document.createElement("img");
+            portrait.hidden = true;
+            portrait.onload = () => {
+                portrait.hidden = false;
+            };
+            portrait.onerror = () => {
+                portrait.hidden = true;
+            };
             portrait.src = `../images/drivers/${imageName}.avif`;
             portrait.alt = "";
             portrait.loading = "lazy";
@@ -372,7 +385,11 @@ async function getNextRoundName(round) {
     const data = await response.json();
     let race = data.MRData.RaceTable.Races[round];
     let h3 = document.getElementById("raceName");
-    h3.textContent = race.raceName;
+    try {
+        h3.textContent = race.raceName;
+    } catch(error) {
+        h3.textContent = "No Races Laft";
+    }
     
 }
 
