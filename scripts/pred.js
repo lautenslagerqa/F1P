@@ -388,7 +388,7 @@ async function getNextRoundName(round) {
     try {
         h3.textContent = race.raceName;
     } catch(error) {
-        h3.textContent = "No Races Laft";
+        h3.textContent = "No Races Left";
     }
     
 }
