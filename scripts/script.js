@@ -26,6 +26,10 @@ let dID = [];
 let pointsArr = [];
 let polesAr = [];
 let winArr = [];
+const driverImageNames = {
+    hulkenberg: "hulkenburg",
+    hirakawa: "ryo_hirakawa"
+};
 
 /**
  * Fetches the standings for the active year and stores the values required for comparison.
@@ -162,19 +166,14 @@ async function compInput() {
     let row = table.rows[0];
     row.innerHTML = '';
 
-    let imageCell = document.createElement('th');
-    imageCell.innerHTML = 'Image';
+    const imageCell = document.createElement('th');
+    imageCell.textContent = 'Image';
     row.appendChild(imageCell);
             
-    const portrait1 = new Image();//document.createElement("img");
-    portrait1.hidden = true;
-    portrait1.onload = () => {
-        portrait1.hidden = false;
-    };
-    portrait1.onerror = () => {
-        portrait1.hidden = true;
-    };
-    portrait1.src = `../images/drivers/${drivers[driverOne]}.avif`;
+    const driverOneId = dID[driverOne];
+    const driverTwoId = dID[driverTwo];
+    const portrait1 = new Image();
+    portrait1.src = `./images/drivers/${driverImageNames[driverOneId] || driverOneId}.avif`;
     portrait1.alt = "";
     portrait1.loading = "lazy";
     portrait1.onerror = () => portrait1.remove();
@@ -182,15 +181,8 @@ async function compInput() {
     let secondIMG = row.insertCell(2);
     firstIMG.append(portrait1);
 
-    const portrait2 = new Image();//document.createElement("img");
-    portrait2.hidden = true;
-    portrait2.onload = () => {
-        portrait2.hidden = false;
-    };
-    portrait2.onerror = () => {
-        portrait2.hidden = true;
-    };
-    portrait2.src = `../images/drivers/${drivers[driverTwo]}.avif`;
+    const portrait2 = new Image();
+    portrait2.src = `./images/drivers/${driverImageNames[driverTwoId] || driverTwoId}.avif`;
     portrait2.alt = "";
     portrait2.loading = "lazy";
     portrait2.onerror = () => portrait2.remove();
