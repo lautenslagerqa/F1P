@@ -36,7 +36,7 @@ async function getDrivers() {
     for (let i = 0; i < dStands.length; i++) {
         drivers.push(dStands[i].familyName);
         dID.push(dStands[i].driverId);
-        numberArr.push(dStands[i].permanentNumber);
+        numberArr.push(dStands[i].permanentNumber || "");
         // famNameArr.push(dStands[i].familyName);
         wikiArr.push(dStands[i].url);
         dobArr.push(dStands[i].dateOfBirth);
@@ -65,12 +65,19 @@ function displayDrivers() {
         const name = document.createElement("h3");
         name.textContent = drivers[i];
 
+        const dob = document.createElement("p");
+        dob.textContent = dobArr[i];
+        
         const link = document.createElement("a");
         link.textContent = `Wikipedia`;
-        link.href = wikiArr[i];
+        link.href = wikiArr[i] || "";
 
-        details.append(name, link);
-        item.append(portrait, details);
+        const number = document.createElement("span");
+        number.className = "eliminated-position";
+        number.textContent = `#${numberArr[i]}`;
+
+        details.append(name, dob, link);
+        item.append(portrait, details, number);
         list.append(item);
     }
 }

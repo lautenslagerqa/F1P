@@ -52,13 +52,16 @@ async function getUser() {
 
     for (let i = 0; i < dStands.length; i++) {
         const row = table.insertRow();
-        const positionCell = row.insertCell(0);
-        const nameCell = row.insertCell(1);
-        const pointsCell = row.insertCell(2);
-        const winsCell = row.insertCell(3);
-        const polesCell = row.insertCell(4);
+        const imageCell = row.insertCell(0);
+        const positionCell = row.insertCell(1);
+        const nameCell = row.insertCell(2);
+        const pointsCell = row.insertCell(3);
+        const winsCell = row.insertCell(4);
+        const polesCell = row.insertCell(5);
 
         const position = i + 1;
+  
+
         positionCell.textContent = `${position}${position === 1 ? 'st' : position === 2 ? 'nd' : position === 3 ? 'rd' : position === 21 ? 'st': 'th'}`;
         nameCell.innerHTML = dStands[i].Driver.familyName;
         pointsCell.innerHTML = dStands[i].points;
@@ -71,6 +74,22 @@ async function getUser() {
         winArr.push(Number(dStands[i].wins));
         polesAr.push(poleCount);
         polesCell.innerHTML = poleCount;
+        let driverId = dStands[i].Driver.driverId;
+        const imageName = driverImageNames[driverId] || driverId;
+        const portrait = new Image();//document.createElement("img");
+        portrait.hidden = true;
+        portrait.onload = () => {
+            portrait.hidden = false;
+        };
+        portrait.onerror = () => {
+            portrait.hidden = true;
+        };
+        portrait.src = `../images/drivers/${imageName}.avif`;
+        portrait.alt = "";
+        portrait.loading = "lazy";
+        portrait.onerror = () => portrait.remove();
+        imageCell.className = "standingsIMG" ;
+        imageCell.append(portrait);      
     }
 }
 
