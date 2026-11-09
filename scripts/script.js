@@ -162,6 +162,43 @@ async function compInput() {
     let row = table.rows[0];
     row.innerHTML = '';
 
+    let imageCell = document.createElement('th');
+    imageCell.innerHTML = 'Image';
+    row.appendChild(imageCell);
+            
+    const portrait1 = new Image();//document.createElement("img");
+    portrait1.hidden = true;
+    portrait1.onload = () => {
+        portrait1.hidden = false;
+    };
+    portrait1.onerror = () => {
+        portrait1.hidden = true;
+    };
+    portrait1.src = `../images/drivers/${drivers[driverOne]}.avif`;
+    portrait1.alt = "";
+    portrait1.loading = "lazy";
+    portrait1.onerror = () => portrait1.remove();
+    let firstIMG = row.insertCell(1);
+    let secondIMG = row.insertCell(2);
+    firstIMG.append(portrait1);
+
+    const portrait2 = new Image();//document.createElement("img");
+    portrait2.hidden = true;
+    portrait2.onload = () => {
+        portrait2.hidden = false;
+    };
+    portrait2.onerror = () => {
+        portrait2.hidden = true;
+    };
+    portrait2.src = `../images/drivers/${drivers[driverTwo]}.avif`;
+    portrait2.alt = "";
+    portrait2.loading = "lazy";
+    portrait2.onerror = () => portrait2.remove();
+    secondIMG.append(portrait2);
+
+    row = table.rows[1];
+    row.innerHTML = '';
+
     let categoryCell = document.createElement('th');
     categoryCell.innerHTML = 'Points';
     row.appendChild(categoryCell);
@@ -171,7 +208,7 @@ async function compInput() {
     firstMetric.innerHTML = pointsArr[driverOne];
     secondMetric.innerHTML = pointsArr[driverTwo];
 
-    row = table.rows[1];
+    row = table.rows[2];
     row.innerHTML = '';
     categoryCell = document.createElement('th');
     categoryCell.innerHTML = 'Wins';
@@ -181,7 +218,7 @@ async function compInput() {
     firstMetric.innerHTML = winArr[driverOne];
     secondMetric.innerHTML = winArr[driverTwo];
 
-    row = table.rows[2];
+    row = table.rows[3];
     row.innerHTML = '';
     categoryCell = document.createElement('th');
     categoryCell.innerHTML = 'Poles';
@@ -200,7 +237,7 @@ async function compInput() {
 function compColor() {
     const table = document.getElementById('comp');
 
-    for (let i = 0; i < table.rows.length; i++) {
+    for (let i = 1; i < table.rows.length; i++) {
         const row = table.rows[i];
         const firstValue = Number(row.cells[1].innerText);
         const secondValue = Number(row.cells[2].innerText);
