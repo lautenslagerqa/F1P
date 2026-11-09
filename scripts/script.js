@@ -229,18 +229,27 @@ async function compInput() {
 function compColor() {
     const table = document.getElementById('comp');
 
-    for (let i = 1; i < table.rows.length; i++) {
-        const row = table.rows[i];
-        const firstValue = Number(row.cells[1].innerText);
-        const secondValue = Number(row.cells[2].innerText);
+    for (const row of table.rows) {
+        if (row.cells.length < 3 || row.cells[0].textContent === 'Image') {
+            continue;
+        }
+
+        const firstCell = row.cells[1];
+        const secondCell = row.cells[2];
+        firstCell.style.background = '';
+        secondCell.style.background = '';
+        firstCell.style.backgroundColor = '';
+        secondCell.style.backgroundColor = '';
+        const firstValue = Number(firstCell.textContent);
+        const secondValue = Number(secondCell.textContent);
 
         if (firstValue > secondValue) {
-            row.cells[1].style.background = '#e11d48';
+            firstCell.style.background = '#e11d48';
         } else if (firstValue === secondValue) {
-            row.cells[1].style.backgroundColor = 'rgba(225, 29, 72, 0.18)';
-            row.cells[2].style.backgroundColor = 'rgba(225, 29, 72, 0.18)';
+            firstCell.style.backgroundColor = 'rgba(225, 29, 72, 0.18)';
+            secondCell.style.backgroundColor = 'rgba(225, 29, 72, 0.18)';
         } else { 
-            row.cells[2].style.background = '#e11d48';
+            secondCell.style.background = '#e11d48';
         }
     }
 }
