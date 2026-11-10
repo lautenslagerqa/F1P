@@ -15,6 +15,7 @@ let pointsArr = [];
 let polesAr = [];
 let winArr = [];
 let remainingRaces = 0;
+let defaultRR = 0;
 let roundNum = 0;
 const driverImageNames = {
     hulkenberg: "hulkenburg",
@@ -217,6 +218,7 @@ async function getRemainingRaces() {
 
     const upcomingRaces = races.filter((race) => new Date(race.date) > today);
     remainingRaces = upcomingRaces.length;
+    defaultRR = remainingRaces;
     document.getElementById("rr").textContent = `Remaining Races: ${remainingRaces}`;
     document.getElementById("r").value = remainingRaces;
 }
@@ -350,38 +352,47 @@ function champChance(id) {
  */
 async function saveInput() {
     const raceInput = document.getElementById('r');
-
-    if (raceInput.value <= 0) {
-        document.getElementById('errorRace').innerHTML = '';
-        document.getElementById('errorRace').innerText = 'Input must be greater than 1.';
-        return;
-    }
-
-    if (((Number(raceInput.value) * 26) + Number(pointsArr[pointsArr.length - 1]) > Number(pointsArr[0]))) {
-        document.getElementById('errorRace').innerHTML = '';
-        document.getElementById('errorRace').innerText = 'Input is too big, everyone can win.';
-        return;
-    }
-
-    document.getElementById('errorRace').innerHTML = '';
-    if (raceInput.value.trim() === '') return;
-
-    const requestedRaces = Number(raceInput.value);
-    if (!Number.isInteger(requestedRaces) || requestedRaces < 0) return;
-
-    remainingRaces = requestedRaces;
-    
     const yearInput = document.getElementById('year');
-
-    if (yearInput.value < 1955 || yearInput.value > new Date().getFullYear()) {
+    const selectedYear = Number(yearInput.value);
+    if (!Number.isInteger(selectedYear) || selectedYear < 1955 || selectedYear > new Date().getFullYear()) {
         document.getElementById('errorYear').innerText = 'Input must be from 1955-present.';
         return;
     }
 
     document.getElementById('errorYear').innerText = '';
-    year = Number(yearInput.value);
+    document.getElementById('errorRace').innerText = '';
 
-    await Promise.all([getUser()]);
+    const enteredRaceCount = raceInput.value.trim();
+    const yearChanged = selectedYear !== year;
+    if (yearChanged) {
+        const previousDefault = defaultRR;
+        const preserveEnteredCount = enteredRaceCount !== '' &&
+            Number(enteredRaceCount) !== previousDefault;
+        year = selectedYear;
+        await Promise.all([getRemainingRaces(), getUser()]);
+        if (preserveEnteredCount) {
+            raceInput.value = enteredRaceCount;
+        }
+    }
+
+    if (raceInput.value.trim() === '') return;
+
+    const requestedRaces = Number(raceInput.value);
+    if (!Number.isInteger(requestedRaces) || requestedRaces < 0) {
+        document.getElementById('errorRace').innerText = 'Input must be a non-negative whole number.';
+        return;
+    }
+
+    if (pointsArr.length > 0 &&
+        (requestedRaces * 26) + Number(pointsArr[pointsArr.length - 1]) > Number(pointsArr[0])) {
+        document.getElementById('errorRace').innerText = 'Input is too big, everyone can win.';
+        return;
+    }
+
+    remainingRaces = requestedRaces;
+    if (!yearChanged) {
+        await getUser();
+    }
     elimDrivers();
     const message = document.getElementById("errorRace");
     if (elimDriv.length + 1 == drivers.length) {
@@ -404,12 +415,21 @@ async function getNextRoundName(round) {
     
 }
 
+/**
+ * Sets year input to be current year.
+ */
 
+function defaultYear() {
+    let button = document.getElementById("year");
+    button.value = new Date().getFullYear();
+
+}
 
 /**
  * Initial page load: fetch the current standings and prediction state.
  */
 async function initPrediction() {
+    defaultYear();
     await Promise.all([getRemainingRaces(), getUser()]);
     elimDrivers();
 }
