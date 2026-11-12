@@ -210,9 +210,14 @@ button:hover {
   filter: brightness(1.04);
 }
 
+
 #year,
 #r {
   margin-bottom: 14px;
+}
+
+.tabs {
+  margin-bottom: 15px;
 }
 
 #errorYear,
@@ -265,6 +270,16 @@ tbody tr:hover {
   width: 48px;
   height: 54px;
   object-fit: cover;
+  object-position: top;
+  border-radius: 10px;
+  background: rgba(148, 163, 184, 0.1);
+}
+.cStandingsIMG img {
+  /* flex: 0 0 64px; */
+  /* width: 256px;
+  height: 72px; */
+  height: auto;
+  /* object-fit: cover; */
   object-position: top;
   border-radius: 10px;
   background: rgba(148, 163, 184, 0.1);
