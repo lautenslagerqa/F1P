@@ -19,6 +19,13 @@ input.addEventListener("keydown", function(event) {
     button.click();
   }
 });
+const h2hButton = document.getElementById("h2hB");
+h2hButton.addEventListener("click", 
+    function() {
+        console.log("pressed");
+        compInput(sType);
+    }
+);
 const base_url = "https://api.jolpi.ca/ergast/f1/";
 let year = 2026;
 let drivers = [];
@@ -30,6 +37,7 @@ let cpointsArr = [];
 let polesAr = [];
 let winArr = [];
 let cwinArr = [];
+let sType = "d";
 const driverImageNames = {
     hulkenberg: "hulkenburg",
     hirakawa: "ryo_hirakawa"
@@ -39,6 +47,7 @@ const driverImageNames = {
  * Fetches the standings for the active year and stores the values required for comparison.
  */
 async function getUser(type) {
+    sType = type;
     if (type == "d") {
         const api_url = `${base_url}${year}/driverstandings/`;
         const [response, poleCounts] = await Promise.all([fetch(api_url), getPoles()]);
@@ -95,7 +104,8 @@ async function getUser(type) {
             portrait.onerror = () => portrait.remove();
             imageCell.className = "standingsIMG" ;
             imageCell.append(portrait);      
-        }
+        } 
+        getDrivers("d");
 
     } else {
         const api_url = `${base_url}${year}/constructorstandings/`;
@@ -155,8 +165,9 @@ async function getUser(type) {
             imageCell.className = "cStandingsIMG" ;
             imageCell.append(portrait);  
         }
+        getDrivers("c");
 
-        }
+    }
 }
 
 /**
@@ -194,8 +205,8 @@ async function getPoles() {
  * Checks that the selected year is valid and reloads the data set.
  */
 async function saveInput() {
+    sType = "d";
     const yearInput = document.getElementById('year');
-
     if (yearInput.value < 1955 || yearInput.value > new Date().getFullYear()) {
         document.getElementById('errorYear').innerText = 'Input must be from 1955-present.';
         return;
@@ -203,40 +214,60 @@ async function saveInput() {
 
     document.getElementById('errorYear').innerText = '';
     year = Number(yearInput.value);
-    await getUser();
-    getDrivers();
+    await getUser("d");
+    // getDrivers("d");
 }
 
 /**
  * Populates both driver selection lists with the current season's competitors.
  */
-function getDrivers() {
+function getDrivers(type) {
     const selectElement1 = document.getElementById('driv1');
     const selectElement2 = document.getElementById('driv2');
+    if (type == "d") {
+        selectElement1.innerHTML = '';
+        selectElement2.innerHTML = '';
 
-    selectElement1.innerHTML = '';
-    selectElement2.innerHTML = '';
+        for (let i = 0; i < drivers.length; i++) {
+            const option = drivers[i];
+            const newOption1 = document.createElement('option');
+            const newOption2 = document.createElement('option');
 
-    for (let i = 0; i < drivers.length; i++) {
-        const option = drivers[i];
-        const newOption1 = document.createElement('option');
-        const newOption2 = document.createElement('option');
+            newOption1.value = String(i);
+            newOption1.textContent = option;
 
-        newOption1.value = String(i);
-        newOption1.textContent = option;
+            newOption2.value = String(i);
+            newOption2.textContent = option;
 
-        newOption2.value = String(i);
-        newOption2.textContent = option;
+            selectElement1.appendChild(newOption1);
+            selectElement2.appendChild(newOption2);
+        }
+    } else {
+        selectElement1.innerHTML = '';
+        selectElement2.innerHTML = '';
 
-        selectElement1.appendChild(newOption1);
-        selectElement2.appendChild(newOption2);
+        for (let i = 0; i < cons.length; i++) {
+            const option = cons[i];
+            const newOption1 = document.createElement('option');
+            const newOption2 = document.createElement('option');
+
+            newOption1.value = String(i);
+            newOption1.textContent = option;
+
+            newOption2.value = String(i);
+            newOption2.textContent = option;
+
+            selectElement1.appendChild(newOption1);
+            selectElement2.appendChild(newOption2);
+        }
+
     }
 }
 
 /**
  * Compares the selected drivers side-by-side and highlights the lead metric.
  */
-async function compInput() {
+async function compInput(type) {
     const driverOne = document.getElementById('driv1').value;
     const driverTwo = document.getElementById('driv2').value;
 
@@ -244,7 +275,6 @@ async function compInput() {
         document.getElementById('errorDriv').innerText = 'Inputs must be different people.';
         return;
     }
-
     document.getElementById('errorDriv').innerText = '';
     const table = document.getElementById('comp');
 
@@ -254,57 +284,103 @@ async function compInput() {
     const imageCell = document.createElement('th');
     imageCell.textContent = 'Image';
     row.appendChild(imageCell);
-            
-    const driverOneId = dID[driverOne];
-    const driverTwoId = dID[driverTwo];
-    const portrait1 = new Image();
-    portrait1.src = `./images/drivers/${driverImageNames[driverOneId] || driverOneId}.avif`;
-    portrait1.alt = "";
-    portrait1.loading = "lazy";
-    portrait1.onerror = () => portrait1.remove();
-    let firstIMG = row.insertCell(1);
-    let secondIMG = row.insertCell(2);
-    firstIMG.append(portrait1);
+    
+    if (type == "d") {
+        const driverOneId = dID[driverOne];
+        const driverTwoId = dID[driverTwo];
+        const portrait1 = new Image();
+        portrait1.src = `./images/drivers/${driverImageNames[driverOneId] || driverOneId}.avif`;
+        portrait1.alt = "";
+        portrait1.loading = "lazy";
+        portrait1.onerror = () => portrait1.remove();
+        let firstIMG = row.insertCell(1);
+        let secondIMG = row.insertCell(2);
+        firstIMG.className = "standingsIMG" ;
+        firstIMG.append(portrait1);
 
-    const portrait2 = new Image();
-    portrait2.src = `./images/drivers/${driverImageNames[driverTwoId] || driverTwoId}.avif`;
-    portrait2.alt = "";
-    portrait2.loading = "lazy";
-    portrait2.onerror = () => portrait2.remove();
-    secondIMG.append(portrait2);
+        const portrait2 = new Image();
+        portrait2.src = `./images/drivers/${driverImageNames[driverTwoId] || driverTwoId}.avif`;
+        portrait2.alt = "";
+        portrait2.loading = "lazy";
+        portrait2.onerror = () => portrait2.remove();
+        secondIMG.className = "standingsIMG" ;
+        secondIMG.append(portrait2);
 
-    row = table.rows[1];
-    row.innerHTML = '';
+        row = table.rows[1];
+        row.innerHTML = '';
 
-    let categoryCell = document.createElement('th');
-    categoryCell.innerHTML = 'Points';
-    row.appendChild(categoryCell);
+        let categoryCell = document.createElement('th');
+        categoryCell.innerHTML = 'Points';
+        row.appendChild(categoryCell);
 
-    let firstMetric = row.insertCell(1);
-    let secondMetric = row.insertCell(2);
-    firstMetric.innerHTML = pointsArr[driverOne];
-    secondMetric.innerHTML = pointsArr[driverTwo];
+        let firstMetric = row.insertCell(1);
+        let secondMetric = row.insertCell(2);
+        firstMetric.innerHTML = pointsArr[driverOne];
+        secondMetric.innerHTML = pointsArr[driverTwo];
 
-    row = table.rows[2];
-    row.innerHTML = '';
-    categoryCell = document.createElement('th');
-    categoryCell.innerHTML = 'Wins';
-    row.appendChild(categoryCell);
-    firstMetric = row.insertCell(1);
-    secondMetric = row.insertCell(2);
-    firstMetric.innerHTML = winArr[driverOne];
-    secondMetric.innerHTML = winArr[driverTwo];
+        row = table.rows[2];
+        row.innerHTML = '';
+        categoryCell = document.createElement('th');
+        categoryCell.innerHTML = 'Wins';
+        row.appendChild(categoryCell);
+        firstMetric = row.insertCell(1);
+        secondMetric = row.insertCell(2);
+        firstMetric.innerHTML = winArr[driverOne];
+        secondMetric.innerHTML = winArr[driverTwo];
 
-    row = table.rows[3];
-    row.innerHTML = '';
-    categoryCell = document.createElement('th');
-    categoryCell.innerHTML = 'Poles';
-    row.appendChild(categoryCell);
-    firstMetric = row.insertCell(1);
-    secondMetric = row.insertCell(2);
-    firstMetric.innerHTML = polesAr[driverOne];
-    secondMetric.innerHTML = polesAr[driverTwo];
+        row = table.rows[3];
+        row.innerHTML = '';
+        categoryCell = document.createElement('th');
+        categoryCell.innerHTML = 'Poles';
+        row.appendChild(categoryCell);
+        firstMetric = row.insertCell(1);
+        secondMetric = row.insertCell(2);
+        firstMetric.innerHTML = polesAr[driverOne];
+        secondMetric.innerHTML = polesAr[driverTwo];
+    } else {
+        const driverOneId = cID[driverOne];
+        const driverTwoId = cID[driverTwo];
+        const portrait1 = new Image();
+        portrait1.src = `./images/teams/${driverOneId}.avif`;
+        portrait1.alt = "";
+        portrait1.loading = "lazy";
+        portrait1.onerror = () => portrait1.remove();
+        let firstIMG = row.insertCell(1);
+        let secondIMG = row.insertCell(2);
+        firstIMG.className = "cStandingsIMG" ;
+        firstIMG.append(portrait1);
 
+        const portrait2 = new Image();
+        portrait2.src = `./images/teams/${driverTwoId}.avif`;
+        portrait2.alt = "";
+        portrait2.loading = "lazy";
+        portrait2.onerror = () => portrait2.remove();
+        secondIMG.className = "cStandingsIMG" ;
+        secondIMG.append(portrait2);
+
+        row = table.rows[1];
+        row.innerHTML = '';
+
+        let categoryCell = document.createElement('th');
+        categoryCell.innerHTML = 'Points';
+        row.appendChild(categoryCell);
+
+        let firstMetric = row.insertCell(1);
+        let secondMetric = row.insertCell(2);
+        firstMetric.innerHTML = cpointsArr[driverOne];
+        secondMetric.innerHTML = cpointsArr[driverTwo];
+
+        row = table.rows[2];
+        row.innerHTML = '';
+        categoryCell = document.createElement('th');
+        categoryCell.innerHTML = 'Wins';
+        row.appendChild(categoryCell);
+        firstMetric = row.insertCell(1);
+        secondMetric = row.insertCell(2);
+        firstMetric.innerHTML = cwinArr[driverOne];
+        secondMetric.innerHTML = cwinArr[driverTwo];
+
+    }
     compColor();
 }
 
@@ -339,4 +415,4 @@ function compColor() {
     }
 }
 
-getUser("d").then(getDrivers);
+getUser("d").then(getDrivers("d"));
