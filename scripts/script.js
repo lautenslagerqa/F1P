@@ -84,7 +84,7 @@ async function getUser() {
         portrait.onerror = () => {
             portrait.hidden = true;
         };
-        portrait.src = `../images/drivers/${imageName}.avif`;
+        portrait.src = `./images/drivers/${imageName}.avif`;
         portrait.alt = "";
         portrait.loading = "lazy";
         portrait.onerror = () => portrait.remove();
