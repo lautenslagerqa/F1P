@@ -347,7 +347,7 @@ async function compInput(type) {
         portrait1.onerror = () => portrait1.remove();
         let firstIMG = row.insertCell(1);
         let secondIMG = row.insertCell(2);
-        firstIMG.className = "cStandingsIMG" ;
+        firstIMG.className = "h2hStandingsIMG" ;
         firstIMG.append(portrait1);
 
         const portrait2 = new Image();
@@ -355,7 +355,7 @@ async function compInput(type) {
         portrait2.alt = "";
         portrait2.loading = "lazy";
         portrait2.onerror = () => portrait2.remove();
-        secondIMG.className = "cStandingsIMG" ;
+        secondIMG.className = "h2hStandingsIMG" ;
         secondIMG.append(portrait2);
 
         row = table.rows[1];

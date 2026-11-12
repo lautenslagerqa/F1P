@@ -284,6 +284,16 @@ tbody tr:hover {
   border-radius: 10px;
   background: rgba(148, 163, 184, 0.1);
 }
+.h2hStandingsIMG img {
+  /* flex: 0 0 64px; */
+  width: 200px;
+  height: 100px;
+  /* height: auto; */
+  /* object-fit: cover; */
+  object-position: top;
+  border-radius: 10px;
+  background: rgba(148, 163, 184, 0.1);
+}
 .eliminated-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
