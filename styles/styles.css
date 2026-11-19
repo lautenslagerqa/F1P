@@ -284,15 +284,13 @@ tbody tr:hover {
   border-radius: 10px;
   background: rgba(148, 163, 184, 0.1);
 }
-.h2hStandingsIMG img {
-  /* flex: 0 0 64px; */
-  width: 200px;
-  height: 100px;
-  /* height: auto; */
-  /* object-fit: cover; */
-  object-position: top;
+#comp td.h2hStandingsIMG img {
+  width: min(100%, 200px);
+  height: auto;
+  object-fit: contain;
   border-radius: 10px;
   background: rgba(148, 163, 184, 0.1);
+  margin: 0 auto;
 }
 .eliminated-list {
   display: grid;
